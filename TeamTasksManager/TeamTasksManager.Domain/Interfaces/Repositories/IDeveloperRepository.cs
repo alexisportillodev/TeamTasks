@@ -5,6 +5,6 @@ namespace TeamTasksManager.Domain.Interfaces.Repositories
     public interface IDeveloperRepository : IGenericRepository<Developer>
     {
         Task<IEnumerable<Developer>> GetActiveDevelopersAsync();
-        Task GetByEmailAsync(string email);
+        Task<Developer> GetByEmailAsync(string email);
     }
 }

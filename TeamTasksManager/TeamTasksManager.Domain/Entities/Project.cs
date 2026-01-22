@@ -13,6 +13,6 @@ namespace TeamTasksManager.Domain.Entities
         public ProjectStatus Status { get; set; }
 
         // Navigation property
-        public virtual ICollection Tasks { get; set; } = new List<TaskItem>();
+        public virtual ICollection<TaskItem> Tasks { get; set; } = new List<TaskItem>();
     }
 }

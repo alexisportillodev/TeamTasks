@@ -6,6 +6,6 @@ namespace TeamTasksManager.Domain.Interfaces.Repositories
     public interface IProjectRepository : IGenericRepository<Project>
     {
         Task<IEnumerable<Project>> GetProjectsByStatusAsync(ProjectStatus status);
-        Task GetProjectWithTasksAsync(int projectId);
+        Task<Project> GetProjectWithTasksAsync(int projectId);
     }
 }
