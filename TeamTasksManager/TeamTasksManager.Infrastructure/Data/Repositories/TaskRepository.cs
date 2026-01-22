@@ -85,5 +85,14 @@ namespace TeamTasksManager.Infrastructure.Data.Repositories
 
             return (tasks, totalCount);
         }
+
+        public async Task<TaskItem?> GetByIdWithDetailsAsync(int taskId)
+        {
+            return await _dbSet
+                .Include(t => t.Project)
+                .Include(t => t.Assignee)
+                .FirstOrDefaultAsync(t => t.TaskId == taskId);
+        }
+
     }
 }

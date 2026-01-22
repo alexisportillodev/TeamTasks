@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TeamTasksManager.Domain\TeamTasksManager.Domain.csproj" />
+    <ProjectReference Include="..\TeamTasksManager.Infrastructure\TeamTasksManager.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -12,7 +12,7 @@ namespace TeamTasksManager.Domain.Entities
         public bool IsActive { get; set; } = true;
 
         // Navigation property
-        public virtual ICollection Tasks { get; set; } = new List<TaskItem>();
+        public virtual ICollection<TaskItem> Tasks { get; set; } = new List<TaskItem>();
 
         // Computed property
         public string FullName => $"{FirstName} {LastName}";
