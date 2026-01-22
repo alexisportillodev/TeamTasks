@@ -16,5 +16,6 @@ namespace TeamTasksManager.Domain.Interfaces.Repositories
             TaskItemStatus? status = null,
             int? assigneeId = null
         );
+        Task<TaskItem> GetByIdWithDetailsAsync(int taskId);
     }
 }

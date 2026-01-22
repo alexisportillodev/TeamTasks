@@ -3,16 +3,16 @@ using TeamTasksManager.Application.DTOs.Task;
 
 namespace TeamTasksManager.Application.Services.Interfaces
 {
-    public interface ITaskService<T> where T : class
+    public interface ITaskService
     {
-        Task<PagedResultDto<T>> GetPagedTasksByProjectAsync(
+        Task<PagedResultDto<TaskDto>> GetPagedTasksByProjectAsync(
             int projectId,
             int page,
             int pageSize,
             string? status = null,
             int? assigneeId = null);
 
-        Task<T> CreateTaskAsync(CreateTaskDto createTaskDto);
-        Task<T> UpdateTaskStatusAsync(int taskId, UpdateTaskStatusDto updateDto);
+        Task<TaskDto> CreateTaskAsync(CreateTaskDto createTaskDto);
+        Task<TaskDto?> UpdateTaskStatusAsync(int taskId, UpdateTaskStatusDto updateDto);
     }
 }
