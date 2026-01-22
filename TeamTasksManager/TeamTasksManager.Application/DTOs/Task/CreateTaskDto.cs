@@ -9,6 +9,6 @@
         public string Status { get; set; } = "ToDo";
         public string Priority { get; set; } = "Medium";
         public int? EstimatedComplexity { get; set; }
-        public DateTime DueDate { get; set; }
+        public DateTime? DueDate { get; set; }
     }
 }
