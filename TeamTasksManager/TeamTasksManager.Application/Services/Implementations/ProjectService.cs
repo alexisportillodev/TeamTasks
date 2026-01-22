@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
+using TeamTasksManager.Application.DTOs.Project;
 using TeamTasksManager.Application.Services.Interfaces;
-using TeamTasksManager.Domain.Entities;
 using TeamTasksManager.Domain.Interfaces;
 
 namespace TeamTasksManager.Application.Services.Implementations
 {
-    public class ProjectService : IProjectService<Project>
+    public class ProjectService : IProjectService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -16,16 +16,18 @@ namespace TeamTasksManager.Application.Services.Implementations
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<Project>> GetAllProjectsWithStatsAsync()
+        public async Task<IEnumerable<ProjectDto>> GetAllProjectsWithStatsAsync()
         {
             var projects = await _unitOfWork.Projects.GetAllAsync();
-            return _mapper.Map<IEnumerable<Project>>(projects);
+            return _mapper.Map<IEnumerable<ProjectDto>>(projects);
         }
 
-        public async Task<Project> GetProjectByIdAsync(int id)
+        public async Task<ProjectDto?> GetProjectByIdAsync(int id)
         {
             var project = await _unitOfWork.Projects.GetByIdAsync(id);
-            return project != null ? _mapper.Map<Project>(project) : null;
+            if (project == null) return null;
+
+            return _mapper.Map<ProjectDto>(project);
         }
     }
 }

@@ -1,8 +1,10 @@
-﻿namespace TeamTasksManager.Application.Services.Interfaces
+﻿using TeamTasksManager.Application.DTOs.Project;
+
+namespace TeamTasksManager.Application.Services.Interfaces
 {
-    public interface IProjectService<T> where T : class
+    public interface IProjectService
     {
-        Task<IEnumerable<T>> GetAllProjectsWithStatsAsync();
-        Task<T> GetProjectByIdAsync(int id);
+        Task<IEnumerable<ProjectDto>> GetAllProjectsWithStatsAsync();
+        Task<ProjectDto?> GetProjectByIdAsync(int id);
     }
 }

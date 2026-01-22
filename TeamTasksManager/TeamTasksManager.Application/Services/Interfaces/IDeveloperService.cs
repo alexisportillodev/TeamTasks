@@ -1,8 +1,10 @@
-﻿namespace TeamTasksManager.Application.Services.Interfaces
+﻿using TeamTasksManager.Application.DTOs;
+
+namespace TeamTasksManager.Application.Services.Interfaces
 {
-    public interface IDeveloperService<T> where T : class
+    public interface IDeveloperService
     {
-        Task<IEnumerable<T>> GetAllActiveDevelopersAsync();
-        Task<T> GetDeveloperByIdAsync(int id);
+        Task<IEnumerable<DeveloperDto>> GetAllActiveDevelopersAsync();
+        Task<DeveloperDto?> GetDeveloperByIdAsync(int id);
     }
 }
