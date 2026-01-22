@@ -46,12 +46,18 @@ namespace TeamTasksManager.Application.Mappings
             CreateMap<CreateTaskDto, TaskItem>()
                 .ForMember(dest => dest.Status,
                     opt => opt.MapFrom(src =>
-                        Enum.Parse<TaskItemStatus>(src.Status)))
+                        Enum.Parse<TaskItemStatus>(src.Status, true)))
                 .ForMember(dest => dest.Priority,
                     opt => opt.MapFrom(src =>
-                        Enum.Parse<TaskPriority>(src.Priority)))
+                        Enum.Parse<TaskPriority>(src.Priority, true)))
                 .ForMember(dest => dest.CreatedAt,
-                    opt => opt.MapFrom(_ => DateTime.UtcNow));
+                    opt => opt.MapFrom(_ => DateTime.UtcNow))
+                .ForMember(dest => dest.DueDate,
+                    opt => opt.MapFrom(src =>
+                        src.DueDate.HasValue
+                            ? DateTime.SpecifyKind(src.DueDate.Value, DateTimeKind.Utc)
+                            : (DateTime?)null
+                    ));
         }
     }
 }

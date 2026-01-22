@@ -14,5 +14,6 @@ namespace TeamTasksManager.Application.Services.Interfaces
 
         Task<TaskDto> CreateTaskAsync(CreateTaskDto createTaskDto);
         Task<TaskDto?> UpdateTaskStatusAsync(int taskId, UpdateTaskStatusDto updateDto);
+        Task<TaskDto> GetTaskByIdAsync(int id);
     }
 }

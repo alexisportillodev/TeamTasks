@@ -95,5 +95,16 @@ namespace TeamTasksManager.Application.Services.Implementations
 
             return _mapper.Map<TaskDto>(task);
         }
+
+        public async Task<TaskDto> GetTaskByIdAsync(int id)
+        {
+            var task = await _unitOfWork.Tasks.GetByIdWithDetailsAsync(id);
+
+            if (task == null)
+                return null;
+
+            return _mapper.Map<TaskDto>(task);
+        }
+
     }
 }
