@@ -8,9 +8,10 @@ namespace TeamTasksManager.Domain.Interfaces
         IProjectRepository Projects { get; }
         ITaskRepository Tasks { get; }
 
-        Task SaveChangesAsync();
+        Task<int> SaveChangesAsync();
         Task BeginTransactionAsync();
         Task CommitTransactionAsync();
         Task RollbackTransactionAsync();
     }
+
 }
