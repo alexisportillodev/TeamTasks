@@ -1,3 +1,4 @@
+using TeamTasksManager.Application.DependencyInjection;
 using TeamTasksManager.Infrastructure.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Application layer
+builder.Services.AddApplication();
 
 // Infrastructure layer
 builder.Services.AddInfrastructure(builder.Configuration);
