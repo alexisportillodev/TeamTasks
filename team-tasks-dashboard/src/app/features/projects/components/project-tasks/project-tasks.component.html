@@ -1,0 +1,50 @@
+<div class="project-tasks-container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <button mat-icon-button (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div>
+        <h1>{{ projectName() }}</h1>
+        <div class="subtitle">Gestión de Tareas</div>
+      </div>
+    </div>
+    <button mat-raised-button color="primary" (click)="navigateToNewTask()">
+      <mat-icon>add</mat-icon> Nueva Tarea
+    </button>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="error()" class="error-message">
+    <mat-icon>error</mat-icon>
+    <p>{{ error() }}</p>
+    <button mat-button (click)="loadTasks()">Reintentar</button>
+  </div>
+
+  <!-- Filtros -->
+  <app-task-filters
+    [developers]="developers()"
+    (filtersChange)="onFiltersChange($event)"
+  ></app-task-filters>
+
+  <!-- Tabla -->
+  <app-loading-spinner *ngIf="loading()"></app-loading-spinner>
+  <app-data-table
+    *ngIf="!loading() && tasks().length"
+    [columns]="taskColumns"
+    [data]="tasks()"
+    (rowClick)="onTaskClick($event)"
+  ></app-data-table>
+
+  <!-- Paginador -->
+  <app-paginator
+    *ngIf="!loading() && tasks().length"
+    [totalItems]="totalItems()"
+    [pageSize]="pageSize()"
+    [currentPage]="currentPage()"
+    (pageChange)="onPageChange($event)"
+  ></app-paginator>
+
+</div>

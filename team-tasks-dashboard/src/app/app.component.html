@@ -1,16 +1,29 @@
-<mat-toolbar color="primary" class="app-toolbar">
-  <span class="toolbar-title">{{ title }}</span>
+<mat-toolbar color="primary">
+  <span>{{ title }}</span>
 
-  <!-- Botones de navegación -->
-  <span class="toolbar-spacer"></span>
-  <button mat-icon-button (click)="navigateHome()" aria-label="Home">
-    <mat-icon>home</mat-icon>
+  <span class="spacer"></span>
+
+  <button mat-button (click)="navigateDashboard()">
+    <mat-icon>dashboard</mat-icon>
+    Dashboard
   </button>
-  <button mat-button routerLink="/tasks">Tareas</button>
-  <button mat-button routerLink="/projects">Proyectos</button>
+
+  <button mat-button (click)="navigateProjects()">
+    <mat-icon>folder</mat-icon>
+    Projects
+  </button>
+
+  <button mat-button (click)="navigateTasks()">
+    <mat-icon>assignment</mat-icon>
+    Tasks
+  </button>
+
+  <button mat-button (click)="navigateDevelopers()">
+    <mat-icon>person</mat-icon>
+    Developers
+  </button>
 </mat-toolbar>
 
-<!-- Contenedor principal -->
-<div class="app-content">
-  <app-dashboard></app-dashboard>
+<div class="content">
+  <router-outlet></router-outlet>
 </div>

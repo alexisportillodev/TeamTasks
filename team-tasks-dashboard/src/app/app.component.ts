@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -22,9 +22,21 @@ import { DashboardComponent } from './features/dashboard/dashboard.component';
 })
 export class AppComponent {
   title = 'Team Tasks Dashboard';
+  private readonly router = inject(Router);
 
-  navigateHome() {
-    console.log('Navegar a Home'); 
-    // Si tienes routing configurado: this.router.navigate(['/']);
+  navigateDashboard() {
+    this.router.navigate(['/dashboard']);
+  }
+
+  navigateProjects() {
+    this.router.navigate(['/projects']);
+  }
+
+  navigateTasks() {
+    this.router.navigate(['/tasks']);
+  }
+
+  navigateDevelopers() {
+    this.router.navigate(['/developers']);
   }
 }

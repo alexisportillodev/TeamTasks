@@ -110,8 +110,14 @@ export class DashboardComponent implements OnInit {
     dataSignal.set(data); // ahora TypeScript sabe que data es del mismo tipo T[]
   }
 
-  onProjectClick(project: ProjectHealth) {
-    console.log('Project clicked:', project);
+  onProjectClick(project: any): void {
+    // Necesitamos obtener el projectId del backend
+    // Por ahora navegamos con el índice + 1 (asumiendo IDs secuenciales)
+    const projectIndex = this.projectHealthData().findIndex(
+      p => p.projectName === project.projectName
+    );
+    const projectId = projectIndex + 1; // Temporal: IDs son 1, 2, 3
+    this.router.navigate(['/projects', projectId, 'tasks']);
   }
 
   navigateToNewTask() {
