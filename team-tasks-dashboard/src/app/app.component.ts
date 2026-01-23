@@ -5,6 +5,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 
+import { FooterComponent } from '@shared/components/footer/footer.component';
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -13,7 +15,8 @@ import { MatMenuModule } from '@angular/material/menu';
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
-    MatMenuModule
+    MatMenuModule,
+    FooterComponent
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
@@ -23,11 +26,11 @@ export class AppComponent {
 
   constructor(private router: Router) {}
 
-  navigateToDashboard(): void {
-    this.router.navigate(['/dashboard']);
-  }
-
   navigateToNewTask(): void {
     this.router.navigate(['/tasks/new']);
+  }
+
+  navigateToDashboard(): void {
+    this.router.navigate(['/dashboard']);
   }
 }

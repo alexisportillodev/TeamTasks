@@ -17,13 +17,17 @@
     <span>Dashboard</span>
   </button>
 
-  <button mat-raised-button color="accent" class="new-task-button" (click)="navigateToNewTask()">
+  <button mat-raised-button color="accent"
+          class="new-task-button"
+          (click)="navigateToNewTask()">
     <mat-icon>add</mat-icon>
     <span>Nueva Tarea</span>
   </button>
 
 </mat-toolbar>
 
-<main>
+<main class="app-main">
   <router-outlet></router-outlet>
 </main>
+
+<app-footer></app-footer>

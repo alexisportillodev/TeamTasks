@@ -58,3 +58,14 @@ main {
     padding: 12px;
   }
 }
+
+:host {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-main {
+  flex: 1;
+  background-color: #f5f5f5;
+}
