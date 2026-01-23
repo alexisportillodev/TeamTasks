@@ -73,7 +73,8 @@
               "buildTarget": "team-tasks-dashboard:build:production"
             },
             "development": {
-              "buildTarget": "team-tasks-dashboard:build:development"
+              "buildTarget": "team-tasks-dashboard:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
