@@ -1,22 +1,60 @@
-.app-toolbar {
+mat-toolbar {
   position: sticky;
   top: 0;
   z-index: 1000;
-  display: flex;
-  justify-content: space-between;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+
+  .logo-button {
+    margin-right: 4px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    font-weight: 500;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .spacer {
+    flex: 1 1 auto;
+  }
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 8px;
+  }
+
+  .new-task-button {
+    margin-left: 16px;
+  }
 }
 
-.toolbar-title {
-  font-size: 20px;
-  font-weight: 500;
-}
-
-.toolbar-spacer {
-  flex: 1 1 auto;
-}
-
-.app-content {
+main {
+  min-height: calc(100vh - 64px);
+  background-color: #f5f6fa;
   padding: 24px;
-  background: #f5f5f5;
-  min-height: calc(100vh - 64px); // altura de toolbar
+}
+
+@media (max-width: 768px) {
+  mat-toolbar {
+    .logo {
+      font-size: 16px;
+    }
+
+    button span {
+      display: none;
+    }
+
+    .new-task-button span {
+      display: inline;
+    }
+  }
+
+  main {
+    padding: 12px;
+  }
 }

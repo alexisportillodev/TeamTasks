@@ -1,29 +1,29 @@
 <mat-toolbar color="primary">
-  <span>{{ title }}</span>
+
+  <!-- Logo / Home -->
+  <button mat-icon-button class="logo-button" (click)="navigateToDashboard()">
+    <mat-icon>dashboard</mat-icon>
+  </button>
+
+  <div class="logo" (click)="navigateToDashboard()">
+    {{ title }}
+  </div>
 
   <span class="spacer"></span>
 
-  <button mat-button (click)="navigateDashboard()">
-    <mat-icon>dashboard</mat-icon>
-    Dashboard
+  <!-- Navegación -->
+  <button mat-button (click)="navigateToDashboard()">
+    <mat-icon>home</mat-icon>
+    <span>Dashboard</span>
   </button>
 
-  <button mat-button (click)="navigateProjects()">
-    <mat-icon>folder</mat-icon>
-    Projects
+  <button mat-raised-button color="accent" class="new-task-button" (click)="navigateToNewTask()">
+    <mat-icon>add</mat-icon>
+    <span>Nueva Tarea</span>
   </button>
 
-  <button mat-button (click)="navigateTasks()">
-    <mat-icon>assignment</mat-icon>
-    Tasks
-  </button>
-
-  <button mat-button (click)="navigateDevelopers()">
-    <mat-icon>person</mat-icon>
-    Developers
-  </button>
 </mat-toolbar>
 
-<div class="content">
+<main>
   <router-outlet></router-outlet>
-</div>
+</main>
