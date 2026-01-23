@@ -10,6 +10,7 @@ import { DashboardService } from '@core/services';
 import { DeveloperWorkload, ProjectHealth, DeveloperDelayRisk } from '@core/models';
 import { DataTableComponent, TableColumn } from '@shared/components/data-table/data-table.component';
 import { LoadingSpinnerComponent } from '@shared/components/loading-spinner/loading-spinner.component';
+import { fadeInAnimation, fadeInListAnimation } from '@shared/animations/fade-in.animation';
 
 @Component({
   selector: 'app-dashboard',
@@ -23,7 +24,8 @@ import { LoadingSpinnerComponent } from '@shared/components/loading-spinner/load
     LoadingSpinnerComponent
   ],
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
+  animations: [fadeInAnimation, fadeInListAnimation]
 })
 export class DashboardComponent implements OnInit {
   private readonly dashboardService = inject(DashboardService);
