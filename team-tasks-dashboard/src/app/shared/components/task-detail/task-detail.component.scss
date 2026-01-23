@@ -1,0 +1,105 @@
+.task-detail-container {
+  min-width: 500px;
+  max-width: 600px;
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+
+  h2 {
+    margin: 0;
+    flex: 1;
+    font-size: 20px;
+  }
+
+  button {
+    margin-left: 8px;
+  }
+}
+
+mat-dialog-content {
+  padding: 24px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.detail-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .detail-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .label {
+      font-weight: 500;
+      color: #666;
+      min-width: 180px;
+    }
+
+    .value {
+      color: #333;
+    }
+
+    mat-chip {
+      font-size: 12px;
+      min-height: 28px;
+    }
+  }
+}
+
+.description-section {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #e0e0e0;
+
+  h3 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+  }
+
+  p {
+    margin: 0;
+    color: #666;
+    line-height: 1.5;
+  }
+}
+
+mat-dialog-actions {
+  padding: 16px 24px;
+  justify-content: flex-end;
+}
+
+@media (max-width: 768px) {
+  .task-detail-container {
+    width: 100%;
+    min-width: auto;
+  }
+
+  .detail-row {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .label {
+      min-width: auto;
+    }
+  }
+}
+
+/* Estado */
+.status-todo { background-color: #e0e0e0; color: #333; }
+.status-inprogress { background-color: #fff3e0; color: #ff9800; }
+.status-blocked { background-color: #ffcdd2; color: #c62828; }
+.status-completed { background-color: #c8e6c9; color: #2e7d32; }
+
+/* Prioridad */
+.priority-low { background-color: #e0f7fa; color: #006064; }
+.priority-medium { background-color: #fff9c4; color: #f9a825; }
+.priority-high { background-color: #ffcdd2; color: #c62828; }

@@ -1,0 +1,74 @@
+<div class="task-detail-container">
+
+  <!-- Header -->
+  <div class="dialog-header">
+    <h2>{{ task.title }}</h2>
+    <button mat-icon-button (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Content -->
+  <mat-dialog-content>
+
+    <div class="detail-section">
+
+      <div class="detail-row">
+        <span class="label">Proyecto:</span>
+        <span class="value">{{ task.projectName }}</span>
+      </div>
+
+      <div class="detail-row">
+        <span class="label">Asignado a:</span>
+        <span class="value">{{ task.assigneeName || 'Sin asignar' }}</span>
+      </div>
+
+      <div class="detail-row">
+        <span class="label">Estado:</span>
+        <mat-chip [ngClass]="getStatusClass(task.status)">
+          {{ task.status | statusLabel }}
+        </mat-chip>
+      </div>
+
+      <div class="detail-row">
+        <span class="label">Prioridad:</span>
+        <mat-chip [ngClass]="getPriorityClass(task.priority)">
+          {{ task.priority | priorityLabel }}
+        </mat-chip>
+      </div>
+
+      <div class="detail-row">
+        <span class="label">Complejidad Estimada:</span>
+        <span class="value">{{ task.estimatedComplexity ?? 'N/A' }}</span>
+      </div>
+
+      <div class="detail-row">
+        <span class="label">Fecha de Vencimiento:</span>
+        <span class="value">{{ task.dueDate | date:'dd/MM/yyyy' }}</span>
+      </div>
+
+      <div class="detail-row" *ngIf="task.completionDate">
+        <span class="label">Fecha de Completitud:</span>
+        <span class="value">{{ task.completionDate | date:'dd/MM/yyyy' }}</span>
+      </div>
+
+      <div class="detail-row">
+        <span class="label">Fecha de Creación:</span>
+        <span class="value">{{ task.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+      </div>
+
+    </div>
+
+    <div class="description-section" *ngIf="task.description">
+      <h3>Descripción</h3>
+      <p>{{ task.description }}</p>
+    </div>
+
+  </mat-dialog-content>
+
+  <!-- Actions -->
+  <mat-dialog-actions>
+    <button mat-button color="primary" (click)="close()">Cerrar</button>
+  </mat-dialog-actions>
+  
+</div>
