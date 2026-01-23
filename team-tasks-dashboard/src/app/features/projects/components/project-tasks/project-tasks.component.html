@@ -16,6 +16,20 @@
     </button>
   </div>
 
+  <!-- ✅ Gráfico de estados -->
+  <mat-card class="chart-card" *ngIf="!loading() && chartData().length">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>pie_chart</mat-icon>
+        Distribución de Tareas por Estado
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <app-task-status-chart [data]="chartData()"></app-task-status-chart>
+    </mat-card-content>
+  </mat-card>
+
   <!-- Error -->
   <div *ngIf="error()" class="error-message">
     <mat-icon>error</mat-icon>
@@ -31,6 +45,7 @@
 
   <!-- Tabla -->
   <app-loading-spinner *ngIf="loading()"></app-loading-spinner>
+
   <app-data-table
     *ngIf="!loading() && tasks().length"
     [columns]="taskColumns"

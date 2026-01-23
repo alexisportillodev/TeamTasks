@@ -1,5 +1,5 @@
-import { Component, Input, OnInit, signal, effect } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Input, OnInit, signal, Inject, PLATFORM_ID, OnChanges, SimpleChanges } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 
@@ -15,7 +15,9 @@ export interface TaskStatusData {
   templateUrl: './task-status-chart.component.html',
   styleUrls: ['./task-status-chart.component.scss']
 })
-export class TaskStatusChartComponent implements OnInit {
+export class TaskStatusChartComponent implements OnInit, OnChanges {
+
+  isBrowser = false;
 
   @Input({ required: true }) data: TaskStatusData[] = [];
 
@@ -51,14 +53,20 @@ export class TaskStatusChartComponent implements OnInit {
     }
   };
 
-  constructor() {
-    effect(() => {
-      this.updateChartData();
-    });
+  constructor(@Inject(PLATFORM_ID) platformId: Object) {
+    this.isBrowser = isPlatformBrowser(platformId);
   }
 
   ngOnInit(): void {
-    this.updateChartData();
+    if (this.isBrowser) {
+      this.updateChartData();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.isBrowser && changes['data']) {
+      this.updateChartData();
+    }
   }
 
   private updateChartData(): void {

@@ -15,6 +15,8 @@ import { TaskFiltersComponent, TaskFilters } from '@shared/components/task-filte
 import { TaskDetailComponent } from '@shared/components/task-detail/task-detail.component';
 import { StatusLabelPipe, PriorityLabelPipe } from '@shared/pipes';
 
+import { TaskStatusChartComponent, TaskStatusData } from '@shared/components/task-status-chart/task-status-chart.component';
+
 // Mapeo de clases para status y priority
 const statusMap: Record<TaskStatus, string> = {
   ToDo: 'status-todo',
@@ -42,6 +44,7 @@ const priorityMap: Record<'Low' | 'Medium' | 'High', string> = {
     LoadingSpinnerComponent,
     PaginatorComponent,
     TaskFiltersComponent,
+    TaskStatusChartComponent, // ✅ gráfico
     StatusLabelPipe,
     PriorityLabelPipe
   ],
@@ -59,15 +62,18 @@ export class ProjectTasksComponent implements OnInit {
   projectName = signal('');
   loading = signal(true);
   error = signal<string | null>(null);
-  
+
   tasks = signal<Task[]>([]);
   developers = signal<Developer[]>([]);
-  
+
   currentPage = signal(1);
   pageSize = signal(10);
   totalItems = signal(0);
-  
+
   currentFilters = signal<TaskFilters>({});
+
+  // ✅ data para el gráfico
+  chartData = signal<TaskStatusData[]>([]);
 
   taskColumns: TableColumn<Task>[] = [
     { key: 'title', label: 'Título', sortable: true },
@@ -104,7 +110,7 @@ export class ProjectTasksComponent implements OnInit {
   private loadProject(): void {
     this.projectService.getProjectById(this.projectId()).subscribe({
       next: project => this.projectName.set(project.name),
-      error: err => this.error.set('No se pudo cargar el proyecto')
+      error: () => this.error.set('No se pudo cargar el proyecto')
     });
   }
 
@@ -120,6 +126,7 @@ export class ProjectTasksComponent implements OnInit {
     this.error.set(null);
 
     const filters = this.currentFilters();
+
     this.projectService.getProjectTasks(
       this.projectId(),
       this.currentPage(),
@@ -130,6 +137,7 @@ export class ProjectTasksComponent implements OnInit {
       next: (result: PagedResult<Task>) => {
         this.tasks.set(result.items);
         this.totalItems.set(result.totalCount);
+        this.calculateChartData(); // ✅ calcular gráfico
         this.loading.set(false);
       },
       error: err => {
@@ -137,6 +145,31 @@ export class ProjectTasksComponent implements OnInit {
         this.loading.set(false);
       }
     });
+  }
+
+  // ✅ calcula info del gráfico
+  calculateChartData(): void {
+    const statusCounts: Record<TaskStatus, number> = {
+      ToDo: 0,
+      InProgress: 0,
+      Blocked: 0,
+      Completed: 0
+    };
+
+    this.tasks().forEach(task => {
+      if (statusCounts[task.status] !== undefined) {
+        statusCounts[task.status]++;
+      }
+    });
+
+    const chartData: TaskStatusData[] = Object.entries(statusCounts)
+      .filter(([_, count]) => count > 0)
+      .map(([status, count]) => ({
+        status: status as TaskStatus,
+        count
+      }));
+
+    this.chartData.set(chartData);
   }
 
   onFiltersChange(filters: TaskFilters) {

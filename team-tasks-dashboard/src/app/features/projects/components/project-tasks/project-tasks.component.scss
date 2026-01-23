@@ -1,76 +1,21 @@
-.project-tasks-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 24px;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
+.chart-card {
+  margin-top: 24px;
   margin-bottom: 24px;
-  gap: 16px;
 
-  .header-left {
-    display: flex;
-    align-items: center;
-    gap: 16px;
+  mat-card-header {
+    margin-bottom: 0;
 
-    h1 {
-      margin: 0;
-      font-size: 28px;
+    mat-card-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 18px;
       font-weight: 500;
       color: #333;
-    }
 
-    .subtitle {
-      font-size: 14px;
-      color: #666;
-      margin-top: 4px;
-    }
-  }
-
-  button {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-}
-
-.error-message {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 40px;
-  background: #ffebee;
-  border-radius: 8px;
-  gap: 16px;
-  margin-top: 24px;
-
-  mat-icon {
-    color: #c62828;
-    font-size: 48px;
-  }
-
-  p {
-    margin: 0;
-    color: #c62828;
-    font-size: 16px;
-  }
-}
-
-mat-card {
-  margin-top: 24px;
-}
-
-@media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-    button {
-      width: 100%;
-      justify-content: center;
+      mat-icon {
+        color: #1976d2;
+      }
     }
   }
 }

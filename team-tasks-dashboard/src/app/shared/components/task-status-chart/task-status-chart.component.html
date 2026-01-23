@@ -1,8 +1,12 @@
-<div class="chart-container">
+<div class="chart-container" *ngIf="isBrowser">
   <canvas
     baseChart
     [type]="chartType"
     [data]="chartData()"
     [options]="chartOptions">
   </canvas>
+</div>
+
+<div *ngIf="!isBrowser" style="text-align:center; padding:16px; color:#777;">
+  Cargando gráfico...
 </div>
