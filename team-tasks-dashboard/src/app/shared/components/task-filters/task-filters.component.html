@@ -1,0 +1,32 @@
+<div class="filters-container">
+  <form [formGroup]="filterForm" class="filters-form">
+
+    <!-- Filtro por Estado -->
+    <mat-form-field appearance="outline">
+      <mat-label>Estado</mat-label>
+      <mat-select formControlName="status">
+        <mat-option *ngFor="let option of statusOptions" [value]="option.value">
+          {{ option.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Filtro por Desarrollador -->
+    <mat-form-field appearance="outline">
+      <mat-label>Desarrollador</mat-label>
+      <mat-select formControlName="assigneeId">
+        <mat-option value="">Todos los desarrolladores</mat-option>
+        <mat-option *ngFor="let dev of developers" [value]="dev.developerId">
+          {{ dev.fullName }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Botón de limpiar -->
+    <button mat-raised-button color="warn" class="clear-button" type="button" (click)="clearFilters()">
+      <mat-icon>clear</mat-icon>
+      Limpiar
+    </button>
+
+  </form>
+</div>

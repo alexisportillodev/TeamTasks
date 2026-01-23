@@ -1,0 +1,39 @@
+.filters-container {
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.filters-form {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+
+  mat-form-field {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .clear-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 56px;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 768px) {
+  .filters-form {
+    flex-direction: column;
+    align-items: stretch;
+
+    mat-form-field,
+    .clear-button {
+      width: 100%;
+    }
+  }
+}
