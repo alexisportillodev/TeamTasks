@@ -1,0 +1,102 @@
+<div class="task-form-container" *ngIf="!loadingData(); else loadingTpl">
+
+  <mat-card>
+
+    <div class="header">
+      <button mat-icon-button (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+
+      <div>
+        <h1>Nueva Tarea</h1>
+        <p>Crear una nueva tarea en un proyecto</p>
+      </div>
+    </div>
+
+    <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="form-grid">
+
+      <mat-form-field appearance="outline">
+        <mat-label>Proyecto</mat-label>
+        <mat-select formControlName="projectId">
+          <mat-option *ngFor="let project of projects()" [value]="project.projectId">
+            {{ project.name }} - {{ project.clientName }}
+          </mat-option>
+        </mat-select>
+        <mat-error>{{ getErrorMessage('projectId') }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Título</mat-label>
+        <input matInput formControlName="title" maxlength="150">
+        <mat-hint align="end">{{ taskForm.get('title')?.value?.length || 0 }}/150</mat-hint>
+        <mat-error>{{ getErrorMessage('title') }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Descripción</mat-label>
+        <textarea matInput rows="3" formControlName="description"></textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Asignado a</mat-label>
+        <mat-select formControlName="assigneeId">
+          <mat-option [value]="''">Sin asignar</mat-option>
+          <mat-option *ngFor="let dev of developers()" [value]="dev.developerId">
+            {{ dev.fullName }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Estado</mat-label>
+        <mat-select formControlName="status">
+          <mat-option *ngFor="let s of statusOptions" [value]="s.value">
+            {{ s.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Prioridad</mat-label>
+        <mat-select formControlName="priority">
+          <mat-option *ngFor="let p of priorityOptions" [value]="p.value">
+            {{ p.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Complejidad</mat-label>
+        <mat-select formControlName="estimatedComplexity">
+          <mat-option [value]="null">Sin especificar</mat-option>
+          <mat-option *ngFor="let c of complexityOptions" [value]="c">
+            {{ c }}
+          </mat-option>
+        </mat-select>
+        <mat-hint>Escala 1 (baja) - 5 (alta)</mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Fecha de vencimiento</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="dueDate">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error>{{ getErrorMessage('dueDate') }}</mat-error>
+      </mat-form-field>
+
+      <div class="actions">
+        <button mat-stroked-button type="button" (click)="cancel()">Cancelar</button>
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="loading()">
+          <mat-icon>save</mat-icon>
+          {{ loading() ? 'Guardando...' : 'Crear tarea' }}
+        </button>
+      </div>
+
+    </form>
+  </mat-card>
+</div>
+
+<ng-template #loadingTpl>
+  <app-loading-spinner></app-loading-spinner>
+</ng-template>
