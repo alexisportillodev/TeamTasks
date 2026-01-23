@@ -1,0 +1,95 @@
+<div class="dashboard-container">
+
+  <!-- Header -->
+  <div class="dashboard-header">
+    <h1>Team Tasks Dashboard</h1>
+    <button mat-flat-button color="primary" (click)="navigateToNewTask()">
+      <mat-icon>add</mat-icon>
+      Nueva Tarea
+    </button>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="error()" class="error-message">
+    <mat-icon>error</mat-icon>
+    <p>{{ error() }}</p>
+    <button mat-stroked-button color="warn" (click)="loadDashboardData()">
+      Reintentar
+    </button>
+  </div>
+
+  <!-- Loading -->
+  <app-loading-spinner *ngIf="loading()"></app-loading-spinner>
+
+  <!-- Dashboard Content -->
+  <div class="dashboard-content" *ngIf="!loading() && !error()">
+
+    <!-- Developer Workload -->
+    <div class="dashboard-section">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>person</mat-icon>
+            Carga de Trabajo por Desarrollador
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <app-data-table
+            [columns]="workloadColumns"
+            [data]="workloadData()"
+            [highlightRow]="undefined"
+            (sortChange)="onWorkloadSort($event)">
+          </app-data-table>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Project Health -->
+    <div class="dashboard-section">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>folder</mat-icon>
+            Estado de Salud de Proyectos
+          </mat-card-title>
+          <mat-card-subtitle>
+            Las filas resaltadas indican proyectos con más tareas abiertas que completadas
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <app-data-table
+            [columns]="projectHealthColumns"
+            [data]="projectHealthData()"
+            [highlightRow]="highlightUnhealthyProjects"
+            (sortChange)="onProjectHealthSort($event)"
+            (rowClick)="onProjectClick($event)">
+          </app-data-table>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Developer Delay Risk -->
+    <div class="dashboard-section">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>warning</mat-icon>
+            Análisis de Riesgo de Retraso
+          </mat-card-title>
+          <mat-card-subtitle>
+            Desarrolladores con alto riesgo están resaltados
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <app-data-table
+            [columns]="delayRiskColumns"
+            [data]="delayRiskData()"
+            [highlightRow]="highlightHighRisk"
+            (sortChange)="onDelayRiskSort($event)">
+          </app-data-table>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+  </div>
+</div>
