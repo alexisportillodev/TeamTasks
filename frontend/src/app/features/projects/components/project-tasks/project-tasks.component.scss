@@ -1,21 +1,87 @@
+.project-tasks-container {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* Header */
+
+.tasks-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.header-left h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.subtitle {
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+/* Mini KPI */
+
+.mini-kpi {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+}
+
+.mini-kpi mat-card {
+  padding: 14px;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.mini-kpi p {
+  margin: 0;
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+.mini-kpi h2 {
+  margin: 6px 0 0;
+  font-size: 26px;
+}
+
+/* Chart */
+
 .chart-card {
-  margin-top: 24px;
-  margin-bottom: 24px;
+  border-radius: 18px;
+}
 
-  mat-card-header {
-    margin-bottom: 0;
+/* Filters */
 
-    mat-card-title {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 18px;
-      font-weight: 500;
-      color: #333;
+.filters-card {
+  padding: 12px;
+  border-radius: 18px;
+}
 
-      mat-icon {
-        color: #1976d2;
-      }
-    }
+/* Paginator */
+
+.paginator-container {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 4px;
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+  .tasks-header {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }

@@ -1,27 +1,52 @@
 <div class="project-tasks-container">
 
-  <!-- Header -->
-  <div class="header">
+  <!-- HEADER -->
+  <div class="tasks-header">
+
     <div class="header-left">
-      <button mat-icon-button (click)="goBack()">
+      <button mat-icon-button class="back-btn" (click)="goBack()">
         <mat-icon>arrow_back</mat-icon>
       </button>
+
       <div>
         <h1>{{ projectName() }}</h1>
-        <div class="subtitle">Gestión de Tareas</div>
+        <span class="subtitle">Gestión de tareas del proyecto</span>
       </div>
     </div>
-    <button mat-raised-button color="primary" (click)="navigateToNewTask()">
-      <mat-icon>add</mat-icon> Nueva Tarea
+
+    <button mat-flat-button color="primary" (click)="navigateToNewTask()">
+      <mat-icon>add</mat-icon>
+      Nueva tarea
     </button>
+
   </div>
 
-  <!-- ✅ Gráfico de estados -->
+  <!-- KPI MINI (opcional pero poderoso) -->
+  <div class="mini-kpi" *ngIf="!loading()">
+
+    <mat-card>
+      <p>Total</p>
+      <h2>{{ totalItems() }}</h2>
+    </mat-card>
+
+    <mat-card>
+      <p>Completadas</p>
+      <h2>{{ completedCount() }}</h2>
+    </mat-card>
+
+    <mat-card>
+      <p>Pendientes</p>
+      <h2>{{ totalItems() - completedCount() }}</h2>
+    </mat-card>
+
+  </div>
+
+  <!-- GRÁFICO -->
   <mat-card class="chart-card" *ngIf="!loading() && chartData().length">
     <mat-card-header>
       <mat-card-title>
         <mat-icon>pie_chart</mat-icon>
-        Distribución de Tareas por Estado
+        Distribución de tareas
       </mat-card-title>
     </mat-card-header>
 
@@ -30,36 +55,43 @@
     </mat-card-content>
   </mat-card>
 
-  <!-- Error -->
+  <!-- ERROR -->
   <div *ngIf="error()" class="error-message">
     <mat-icon>error</mat-icon>
     <p>{{ error() }}</p>
-    <button mat-button (click)="loadTasks()">Reintentar</button>
+    <button mat-stroked-button color="warn" (click)="loadTasks()">Reintentar</button>
   </div>
 
-  <!-- Filtros -->
-  <app-task-filters
-    [developers]="developers()"
-    (filtersChange)="onFiltersChange($event)"
-  ></app-task-filters>
+  <!-- FILTROS -->
+  <mat-card class="filters-card">
+    <app-task-filters
+      [developers]="developers()"
+      (filtersChange)="onFiltersChange($event)">
+    </app-task-filters>
+  </mat-card>
 
-  <!-- Tabla -->
+  <!-- TABLA -->
   <app-loading-spinner *ngIf="loading()"></app-loading-spinner>
 
-  <app-data-table
-    *ngIf="!loading() && tasks().length"
-    [columns]="taskColumns"
-    [data]="tasks()"
-    (rowClick)="onTaskClick($event)"
-  ></app-data-table>
+  <mat-card *ngIf="!loading() && tasks().length">
+    <app-data-table
+      [columns]="taskColumns"
+      [data]="tasks()"
+      (rowClick)="onTaskClick($event)">
+    </app-data-table>
+  </mat-card>
 
-  <!-- Paginador -->
-  <app-paginator
-    *ngIf="!loading() && tasks().length"
-    [totalItems]="totalItems()"
-    [pageSize]="pageSize()"
-    [currentPage]="currentPage()"
-    (pageChange)="onPageChange($event)"
-  ></app-paginator>
+  <!-- PAGINADOR -->
+  <div class="paginator-container"
+       *ngIf="!loading() && tasks().length">
+
+    <app-paginator
+      [totalItems]="totalItems()"
+      [pageSize]="pageSize()"
+      [currentPage]="currentPage()"
+      (pageChange)="onPageChange($event)">
+    </app-paginator>
+
+  </div>
 
 </div>

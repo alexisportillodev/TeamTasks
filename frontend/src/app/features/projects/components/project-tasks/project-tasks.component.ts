@@ -199,4 +199,9 @@ export class ProjectTasksComponent implements OnInit {
   goBack() {
     this.router.navigate(['/dashboard']);
   }
+
+  completedCount() {
+    return this.tasks()?.filter(t => t.status === 'Completed').length ?? 0;
+  }
+
 }
