@@ -42,34 +42,75 @@ export class DashboardComponent implements OnInit {
   // Columnas
   workloadColumns: TableColumn<DeveloperWorkload>[] = [
     { key: 'developerName', label: 'Desarrollador', sortable: true },
-    { key: 'openTasksCount', label: 'Tareas Abiertas', sortable: true },
-    { key: 'averageEstimatedComplexity', label: 'Complejidad Promedio', sortable: true, 
-      format: (v) => v ? v.toFixed(2) : '0.00' }
+    { key: 'openTasksCount', label: 'Tareas Abiertas', sortable: true, cssClass: () => 'text-center' },
+    {
+      key: 'averageEstimatedComplexity',
+      label: 'Complejidad Promedio',
+      sortable: true,
+      format: (v) => v ? v.toFixed(2) : '0.00',
+      cssClass: () => 'text-center'
+    }
   ];
 
   projectHealthColumns: TableColumn<ProjectHealth>[] = [
     { key: 'projectName', label: 'Proyecto', sortable: true },
-    { key: 'totalTasks', label: 'Total Tareas', sortable: true },
-    { key: 'openTasks', label: 'Abiertas', sortable: true, 
-      cssClass: (v) => v > 0 ? 'status-inprogress' : '' },
-    { key: 'completedTasks', label: 'Completadas', sortable: true, 
-      cssClass: () => 'status-completed' }
+
+    { key: 'totalTasks', label: 'Total', sortable: true, cssClass: () => 'text-center' },
+
+    {
+      key: 'openTasks',
+      label: 'Abiertas',
+      sortable: true,
+      format: v => v,
+      cssClass: v => v > 0 ? 'badge badge-open' : 'badge badge-completed'
+    },
+
+    {
+      key: 'completedTasks',
+      label: 'Completadas',
+      sortable: true,
+      format: v => v,
+      cssClass: () => 'badge badge-completed'
+    }
   ];
 
   delayRiskColumns: TableColumn<DeveloperDelayRisk>[] = [
     { key: 'developerName', label: 'Desarrollador', sortable: true },
-    { key: 'openTasksCount', label: 'Tareas Abiertas', sortable: true },
-    { key: 'avgDelayDays', label: 'Retraso Promedio (días)', sortable: true, 
-      format: (v) => v ? v.toFixed(1) : '0.0' },
-    { key: 'nearestDueDate', label: 'Próximo Vencimiento', 
-      format: (v) => v ? new Date(v).toLocaleDateString() : 'N/A' },
-    { key: 'latestDueDate', label: 'Último Vencimiento', 
-      format: (v) => v ? new Date(v).toLocaleDateString() : 'N/A' },
-    { key: 'predictedCompletionDate', label: 'Fecha Estimada', 
-      format: (v) => v ? new Date(v).toLocaleDateString() : 'N/A' },
-    { key: 'highRiskFlag', label: 'Riesgo', 
-      format: (v) => v === 1 ? 'Alto' : 'Normal',
-      cssClass: (v) => v === 1 ? 'risk-high' : 'risk-normal' }
+
+    { key: 'openTasksCount', label: 'Abiertas', sortable: true, cssClass: () => 'text-center' },
+
+    {
+      key: 'avgDelayDays',
+      label: 'Retraso Promedio (días)',
+      sortable: true,
+      format: v => v ? v.toFixed(1) : '0.0',
+      cssClass: () => 'text-center'
+    },
+
+    {
+      key: 'nearestDueDate',
+      label: 'Próximo vencimiento',
+      format: v => v ? new Date(v).toLocaleDateString() : 'N/A'
+    },
+
+    {
+      key: 'latestDueDate',
+      label: 'Último vencimiento',
+      format: v => v ? new Date(v).toLocaleDateString() : 'N/A'
+    },
+
+    {
+      key: 'predictedCompletionDate',
+      label: 'Fecha estimada',
+      format: v => v ? new Date(v).toLocaleDateString() : 'N/A'
+    },
+
+    {
+      key: 'highRiskFlag',
+      label: 'Riesgo',
+      format: v => v === 1 ? 'ALTO' : 'NORMAL',
+      cssClass: v => v === 1 ? 'badge badge-risk' : 'badge badge-completed'
+    }
   ];
 
   ngOnInit(): void {

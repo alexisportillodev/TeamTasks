@@ -1,46 +1,96 @@
 .table-container {
-  width: 100%;
-  overflow-x: auto;
-  border-radius: 8px;
-  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
 }
 
-table {
+.table-responsive {
   width: 100%;
-  border-collapse: collapse;
+  overflow-x: auto;
+}
+
+/* Tabla base */
+.custom-table {
+  width: 100%;
+  min-width: 650px;
+  border-spacing: 0;
 }
 
 th.mat-header-cell {
-  background-color: #f5f5f5;
+  background: #f6f8fb;
   font-weight: 600;
-  color: #333;
-  padding: 16px;
+  font-size: 13px;
+  color: #374151;
+  padding: 14px;
 }
 
 td.mat-cell {
-  padding: 16px;
-  color: #666;
+  padding: 14px;
+  font-size: 13px;
+  color: #1f2933;
+  border-bottom: 1px solid #eef2f7;
 }
 
+.cell-content {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Hover */
 .clickable-row {
   cursor: pointer;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: #f9f9f9;
-  }
+  transition: background 0.2s ease, transform 0.1s ease;
 }
 
+.clickable-row:hover {
+  background: #f4f7fb;
+}
+
+/* Fila resaltada (riesgo / problemas) */
 .highlighted-row {
-  background-color: #fff3e0 !important;
-
-  &:hover {
-    background-color: #ffe0b2 !important;
-  }
+  background: #fff4f4 !important;
+  border-left: 4px solid #d32f2f;
 }
 
-.no-data {
-  padding: 40px;
+/* Badges genéricos */
+.badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  width: fit-content;
+}
+
+/* Estados */
+.badge-open {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.badge-completed {
+  background: #ecfdf3;
+  color: #047857;
+}
+
+.badge-risk {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+/* Números */
+.text-center {
   text-align: center;
-  color: #999;
+  font-weight: 600;
+}
+
+/* No data */
+.no-data {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 28px;
+  opacity: 0.7;
+  font-size: 14px;
 }
