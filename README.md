@@ -228,10 +228,6 @@ El sistema implementa validaciones robustas usando **FluentValidation**:
 
 ## 🎨 Frontend (Angular 18)
 
-### 📦 Instalación
-
-*(Próximamente - En desarrollo)*
-
 #### Requisitos Previos
 - Node.js 18+ y npm
 - Angular CLI 18
@@ -251,32 +247,520 @@ cd team-tasks-dashboard
 npm install
 ```
 
-### 🧩 Características Planificadas
+### 📦 Instalación
 
-- Standalone Components (sin NgModules)
-- Signals para manejo de estado reactivo
-- Angular Material para componentes UI
-- Reactive Forms para formularios
-- HttpClient con interceptors
-- Componentes reutilizables (tabla, filtros)
-- Chart.js para visualizaciones
-- Responsive design con CSS Grid/Flexbox
+# Team Tasks Dashboard - Frontend
 
-### 📱 Vistas Planificadas
+Aplicación web desarrollada en Angular 18 para gestión de proyectos y tareas.
 
-1. **Dashboard (Home)**
-   - Tabla de carga por desarrollador
-   - Tabla de estado por proyecto
-   - Tabla de riesgo de retraso
+## Características
 
-2. **Tareas por Proyecto**
-   - Vista detallada de tareas
-   - Filtros por estado y desarrollador
-   - Paginación
+- ✅ Dashboard interactivo con métricas en tiempo real
+- ✅ Gestión de tareas por proyecto con filtros y paginación
+- ✅ Formulario de creación de tareas con validaciones
+- ✅ Gráficos de distribución de tareas
+- ✅ Diseño responsive con Material Design
+- ✅ Componentes standalone (sin NgModules)
+- ✅ Signals para estado reactivo
 
-3. **Formulario de Nueva Tarea**
-   - Validación en tiempo real
-   - Integración con API
+## Tecnologías
+
+- Angular 18
+- Angular Material 18
+- Chart.js + ng2-charts
+- RxJS
+- TypeScript
+- SCSS
+
+## Instalación
+```bash
+npm install
+```
+
+## Desarrollo
+```bash
+ng serve
+```
+
+La aplicación estará disponible en `http://localhost:4200`
+
+## Build
+```bash
+ng build
+```
+
+Los archivos de build estarán en `dist/`
+
+## Estructura del Proyecto
+```
+src/app/
+├── core/                 # Servicios singleton y modelos
+│   ├── models/
+│   ├── services/
+│   └── interceptors/
+├── shared/               # Componentes, pipes y directivas reutilizables
+│   ├── components/
+│   ├── pipes/
+│   ├── directives/
+│   └── animations/
+├── features/             # Módulos por funcionalidad
+│   ├── dashboard/
+│   ├── projects/
+│   └── tasks/
+└── app.component.ts
+```
+
+## Componentes Reutilizables
+
+### DataTable Component
+Tabla configurable con las siguientes características:
+- Ordenamiento por columnas
+- Formato personalizado de valores
+- Estilos condicionales
+- Resaltado de filas
+- Eventos de click
+
+**Uso:**
+```typescript
+import { DataTableComponent, TableColumn } from '@shared/components/data-table/data-table.component';
+
+columns: TableColumn[] = [
+  {
+    key: 'name',
+    label: 'Nombre',
+    sortable: true
+  },
+  {
+    key: 'status',
+    label: 'Estado',
+    format: (value) => value.toUpperCase(),
+    cssClass: (value) => value === 'active' ? 'text-success' : 'text-danger'
+  }
+];
+```
+
+### Paginator Component
+Paginación estándar con Material Design:
+- Tamaños configurables (5, 10, 25, 50)
+- Navegación entre páginas
+- Información de totales
+
+### TaskFilters Component
+Filtros dinámicos para tareas:
+- Filtro por estado (dropdown)
+- Filtro por desarrollador (dropdown)
+- Debounce de 300ms
+- Botón de limpiar filtros
+
+### LoadingSpinner Component
+Indicador de carga centralizado con Material Spinner.
+
+### TaskStatusChart Component
+Gráfico de pie para distribución de tareas:
+- Colores por estado
+- Tooltips con porcentajes
+- Responsive
+
+### TaskDetail Component
+Modal de detalle de tarea con Material Dialog:
+- Información completa de la tarea
+- Chips con colores para estado y prioridad
+- Diseño responsive
+
+### Footer Component
+Footer informativo con año actual y tecnologías utilizadas.
+
+## Pipes Personalizados
+
+### StatusLabelPipe
+Traduce estados de inglés a español:
+```typescript
+{{ 'InProgress' | statusLabel }}  // Output: "En Progreso"
+```
+
+### PriorityLabelPipe
+Traduce prioridades de inglés a español:
+```typescript
+{{ 'High' | priorityLabel }}  // Output: "Alta"
+```
+
+## Directivas
+
+### HighlightRiskDirective
+Resalta elementos con alto riesgo:
+```html
+<div [appHighlightRisk]="item.highRiskFlag">Contenido</div>
+```
+
+## Servicios HTTP
+
+### DeveloperService
+```typescript
+getAllDevelopers(): Observable<Developer[]>
+getDeveloperById(id: number): Observable<Developer>
+```
+
+### ProjectService
+```typescript
+getAllProjects(): Observable<ProjectWithStats[]>
+getProjectById(id: number): Observable<Project>
+getProjectTasks(projectId, page, pageSize, status?, assigneeId?): Observable<PagedResult<Task>>
+```
+
+### TaskService
+```typescript
+createTask(taskDto: CreateTaskDto): Observable<Task>
+updateTaskStatus(taskId: number, updateDto: UpdateTaskStatusDto): Observable<Task>
+```
+
+### DashboardService
+```typescript
+getDeveloperWorkload(): Observable<DeveloperWorkload[]>
+getProjectHealth(): Observable<ProjectHealth[]>
+getDeveloperDelayRisk(): Observable<DeveloperDelayRisk[]>
+```
+
+## Modelos TypeScript
+
+### Developer
+```typescript
+interface Developer {
+  developerId: number;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  email: string;
+  isActive: boolean;
+}
+```
+
+### Task
+```typescript
+interface Task {
+  taskId: number;
+  projectId: number;
+  projectName: string;
+  title: string;
+  description?: string;
+  assigneeId?: number;
+  assigneeName?: string;
+  status: TaskStatus;
+  priority: TaskPriority;
+  estimatedComplexity?: number;
+  dueDate: string;
+  completionDate?: string;
+  createdAt: string;
+}
+```
+
+### CreateTaskDto
+```typescript
+interface CreateTaskDto {
+  projectId: number;
+  title: string;
+  description?: string;
+  assigneeId?: number;
+  status: TaskStatus;
+  priority: TaskPriority;
+  estimatedComplexity?: number;
+  dueDate: string;
+}
+```
+
+## Configuración del Backend
+
+### Variables de Entorno
+
+**Desarrollo** (`src/environments/environment.development.ts`):
+```typescript
+export const environment = {
+  production: false,
+  apiUrl: '/api' // Usando proxy
+};
+```
+
+**Producción** (`src/environments/environment.ts`):
+```typescript
+export const environment = {
+  production: true,
+  apiUrl: 'https://api.teamtasks.com/api'
+};
+```
+
+### Proxy Configuration
+
+El archivo `proxy.conf.json` redirige las llamadas `/api` al backend:
+```json
+{
+  "/api": {
+    "target": "https://localhost:7001",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}
+```
+
+## Scripts Útiles
+```bash
+# Desarrollo
+npm start
+
+# Desarrollo con proxy
+ng serve --proxy-config proxy.conf.json
+
+# Build de producción
+npm run build
+
+# Build con análisis de bundle
+ng build --stats-json
+npx webpack-bundle-analyzer dist/team-tasks-dashboard/stats.json
+
+# Tests unitarios
+npm test
+
+# Tests con cobertura
+ng test --code-coverage
+
+# Linting
+npm run lint
+
+# Formateo de código
+npm run format
+```
+
+## Rutas de la Aplicación
+
+| Ruta | Componente | Descripción |
+|------|------------|-------------|
+| `/` | Redirect | Redirige a /dashboard |
+| `/dashboard` | DashboardComponent | Vista principal con métricas |
+| `/projects/:id/tasks` | ProjectTasksComponent | Tareas de un proyecto específico |
+| `/tasks/new` | TaskFormComponent | Formulario de nueva tarea |
+
+## Validaciones del Formulario
+
+### CreateTask Form
+- **Proyecto**: Requerido
+- **Título**: Requerido, máximo 150 caracteres
+- **Estado**: Requerido
+- **Prioridad**: Requerido
+- **Complejidad**: Opcional, entre 1-5
+- **Fecha de Vencimiento**: Requerida, debe ser hoy o posterior
+
+## Estilos Globales
+
+### Clases de Utilidad
+```scss
+.container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+.card { background: white; border-radius: 8px; box-shadow: ...; }
+.text-center { text-align: center; }
+.mt-1, .mt-2, .mt-3, .mt-4 { margin-top: 8px, 16px, 24px, 32px; }
+.mb-1, .mb-2, .mb-3, .mb-4 { margin-bottom: 8px, 16px, 24px, 32px; }
+```
+
+### Clases de Estado
+```scss
+.status-todo { color: #9e9e9e; }
+.status-inprogress { color: #2196f3; }
+.status-blocked { color: #f44336; }
+.status-completed { color: #4caf50; }
+```
+
+### Clases de Prioridad
+```scss
+.priority-low { color: #4caf50; }
+.priority-medium { color: #ff9800; }
+.priority-high { color: #f44336; }
+```
+
+### Clases de Riesgo
+```scss
+.risk-high { background-color: #ffebee; color: #c62828; }
+.risk-normal { background-color: #e8f5e9; color: #2e7d32; }
+```
+
+## Interceptores HTTP
+
+### HttpErrorInterceptor
+Captura errores HTTP y los formatea:
+- Errores del cliente (red, timeout)
+- Errores del servidor (4xx, 5xx)
+- Extrae mensajes del backend
+- Logs en consola para debugging
+
+## Animaciones
+
+### FadeIn Animation
+```typescript
+import { fadeInAnimation } from '@shared/animations/fade-in.animation';
+
+@Component({
+  animations: [fadeInAnimation]
+})
+
+// En template:
+<div [@fadeIn]>Contenido</div>
+```
+
+## Configuración de Path Aliases
+```json
+{
+  "compilerOptions": {
+    "paths": {
+      "@core/*": ["src/app/core/*"],
+      "@shared/*": ["src/app/shared/*"],
+      "@features/*": ["src/app/features/*"],
+      "@environments/*": ["src/environments/*"]
+    }
+  }
+}
+```
+
+**Uso:**
+```typescript
+import { DeveloperService } from '@core/services';
+import { DataTableComponent } from '@shared/components/data-table/data-table.component';
+```
+
+## Testing
+
+### Ejecutar Tests
+```bash
+# Tests unitarios
+ng test
+
+# Tests con cobertura
+ng test --code-coverage
+
+# Tests en CI
+ng test --watch=false --browsers=ChromeHeadless
+```
+
+### Estructura de Tests
+```
+src/app/
+├── core/
+│   └── services/
+│       └── developer.service.spec.ts
+├── shared/
+│   └── components/
+│       └── data-table/
+│           └── data-table.component.spec.ts
+└── features/
+    └── dashboard/
+        └── dashboard.component.spec.ts
+```
+
+## Build y Deploy
+
+### Build de Producción
+```bash
+ng build --configuration production
+```
+
+Genera archivos optimizados en `dist/team-tasks-dashboard/`
+
+### Configuración de Build
+- Minificación activada
+- Tree-shaking habilitado
+- AOT compilation
+- Output hashing para cache busting
+- Source maps deshabilitados en producción
+
+### Deploy
+Los archivos de `dist/` pueden ser desplegados en:
+- Firebase Hosting
+- Netlify
+- Vercel
+- Azure Static Web Apps
+- AWS S3 + CloudFront
+- Nginx / Apache
+
+## Troubleshooting
+
+### Error de CORS
+**Síntoma**: Errores de CORS en consola
+
+**Solución**:
+1. Verificar que el backend tenga CORS habilitado
+2. Usar proxy en desarrollo (`proxy.conf.json`)
+3. Verificar que la URL del backend sea correcta
+
+### Error "Cannot find module"
+**Síntoma**: Error al importar módulos
+
+**Solución**:
+```bash
+rm -rf node_modules package-lock.json
+npm install
+```
+
+### Chart.js no renderiza
+**Síntoma**: Gráfico no se muestra
+
+**Solución**:
+1. Verificar que Chart.js esté registrado en `main.ts`
+2. Verificar que los datos no estén vacíos
+3. Revisar consola por errores
+
+### Build falla por bundle size
+**Síntoma**: Error "budgets exceeded"
+
+**Solución**:
+1. Analizar bundle: `ng build --stats-json`
+2. Lazy loading de módulos pesados
+3. Optimizar imports (usar imports específicos)
+
+## Buenas Prácticas Implementadas
+
+✅ **Standalone Components**: Sin NgModules, usando imports directos
+✅ **Signals**: Estado reactivo moderno de Angular
+✅ **Dependency Injection**: Usando `inject()` function
+✅ **Typed Forms**: FormGroup con tipado fuerte
+✅ **Lazy Loading**: Rutas con loadComponent
+✅ **Error Handling**: Interceptor global + manejo local
+✅ **Responsive Design**: Mobile-first approach
+✅ **Accessibility**: Uso de ARIA labels y semántica HTML5
+✅ **Performance**: OnPush change detection donde aplica
+✅ **Code Organization**: Separación clara de responsabilidades
+
+## Contribución
+
+1. Fork el repositorio
+2. Crea una rama para tu feature (`git checkout -b feat/nueva-funcionalidad`)
+3. Commit tus cambios siguiendo convenciones (`git commit -m "feat(dashboard): agregar nueva métrica"`)
+4. Push a la rama (`git push origin feat/nueva-funcionalidad`)
+5. Abre un Pull Request
+
+## Convenciones de Commits
+
+| Tipo | Descripción |
+|------|-------------|
+| `feat` | Nueva funcionalidad |
+| `fix` | Corrección de bug |
+| `docs` | Documentación |
+| `style` | Formato (espacios, punto y coma) |
+| `refactor` | Refactorización sin cambiar funcionalidad |
+| `perf` | Mejora de rendimiento |
+| `test` | Agregar o modificar tests |
+| `build` | Cambios en build, dependencias |
+| `ci` | Cambios en pipelines |
+| `chore` | Tareas menores (config, scripts) |
+
+**Ejemplo:** `feat(tasks): agregar filtro por fecha de creación`
+
+## Licencia
+
+Este proyecto es un ejemplo educativo de arquitectura de software.
+
+## Contacto
+
+Para preguntas o sugerencias, abre un issue en el repositorio.
+
+---
+
+**Desarrollado con ❤️ usando Angular 18**
 
 ---
 
