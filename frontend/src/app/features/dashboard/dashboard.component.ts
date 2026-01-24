@@ -138,4 +138,26 @@ export class DashboardComponent implements OnInit {
   onDelayRiskSort(sort: any) {
     this.onSort(this.delayRiskData, sort);
   }
+
+  totalTasks() {
+    return this.workloadData()
+      ?.reduce((acc, d) => acc + d.openTasksCount, 0) ?? 0;
+  }
+
+  riskyDevsCount() {
+    return this.delayRiskData()
+      ?.filter(d => d.highRiskFlag === 1).length ?? 0;
+  }
+
+  efficiency() {
+    if (!this.projectHealthData()?.length) return 0;
+
+    const total = this.projectHealthData()
+      .reduce((acc, p) => acc + p.completedTasks + p.openTasks, 0);
+
+    const completed = this.projectHealthData()
+      .reduce((acc, p) => acc + p.completedTasks, 0);
+
+    return total ? Math.round((completed / total) * 100) : 0;
+  }
 }
