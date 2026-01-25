@@ -37,21 +37,13 @@ El proyecto utiliza **PostgreSQL**. Se ha optado por separar las tablas del sist
 
 Para levantar la base de datos, sigue estos pasos estrictos usando tu cliente SQL (pgAdmin):
 
-1.  **Crear la Base de Datos:**
-    Ejecuta el siguiente comando conectado a tu servidor local:
-```sql
-    CREATE DATABASE team_tasks_sample;
-```
-
-2.  **Conexión:**
-    Cambia tu conexión en pgAdmin para apuntar a la nueva base de datos `team_tasks_sample`.
-
-3.  **Despliegue del Esquema y Datos:**
-    Ejecuta el script `DBSetup_TeamTasks.sql` incluido en este repositorio. Este script realiza lo siguiente:
-    * Crea el esquema `core`.
-    * Establece el `search_path`.
-    * Crea las tablas con integridad referencial.
-    * Inserta datos semilla (5 devs, 3 proyectos, 20 tareas).
+**Despliegue del Esquema y Datos:**
+  Ejecuta el script `DBSetup_TeamTasks.sql` incluido en este repositorio. Este script realiza lo siguiente:
+  * Crea la base de datos `team_tasks_sample`.
+  * Crea el esquema `core`.
+  * Establece el `search_path`.
+  * Crea las tablas con integridad referencial.
+  * Inserta datos semilla (5 devs, 3 proyectos, 20 tareas).
 
 ---
 
@@ -100,8 +92,8 @@ TeamTasksManager/
 
 1. **Clonar el repositorio**
 ```bash
-   git clone <url-del-repositorio>
-   cd TeamTasksManager
+   git clone git@github.com:alexisportillodev/TeamTasks.git
+   cd TeamTasks/backend
 ```
 
 2. **Restaurar paquetes NuGet**
@@ -128,13 +120,14 @@ TeamTasksManager/
 5. **Ejecutar la API**
 ```bash
    cd TeamTasksManager.API
-   dotnet run
+   dotnet dev-certs https --trust
+   dotnet run --launch-profile "https"
 ```
 
 La API estará disponible en:
-- HTTPS: `https://localhost:7xxx`
-- HTTP: `http://localhost:5xxx`
-- Swagger UI: `https://localhost:7xxx/swagger`
+- HTTPS: `https://localhost:7078`
+- HTTP: `http://localhost:5141`
+- Swagger UI: `https://localhost:7078/swagger`
 
 ### 🔌 Endpoints API
 
@@ -176,7 +169,7 @@ La API estará disponible en:
   "status": "ToDo",
   "priority": "High",
   "estimatedComplexity": 4,
-  "dueDate": "2025-02-15"
+  "dueDate": "2026-02-15"
 }
 ```
 
@@ -228,27 +221,6 @@ El sistema implementa validaciones robustas usando **FluentValidation**:
 
 ## 🎨 Frontend (Angular 18)
 
-#### Requisitos Previos
-- Node.js 18+ y npm
-- Angular CLI 18
-
-#### Pasos de Instalación
-```bash
-# Instalar Angular CLI globalmente
-npm install -g @angular/cli@18
-
-# Crear el proyecto
-ng new team-tasks-dashboard --standalone --routing --style=scss
-
-# Navegar al proyecto
-cd team-tasks-dashboard
-
-# Instalar dependencias
-npm install
-```
-
-### 📦 Instalación
-
 # Team Tasks Dashboard - Frontend
 
 Aplicación web desarrollada en Angular 18 para gestión de proyectos y tareas.
@@ -272,8 +244,22 @@ Aplicación web desarrollada en Angular 18 para gestión de proyectos y tareas.
 - TypeScript
 - SCSS
 
-## Instalación
+### 📦 Instalación
+
+#### Requisitos Previos
+- Node.js 18+ y npm
+- Angular CLI 18
+- Respositorio del proyecto, se descargó en la sección anterior
+
+#### Pasos de Instalación
 ```bash
+# Instalar Angular CLI globalmente
+npm install -g @angular/cli@18
+
+# Navegar al proyecto (estar en la ruta base del proyecto /TeamTasks)
+cd frontend
+
+# Instalar dependencias
 npm install
 ```
 
