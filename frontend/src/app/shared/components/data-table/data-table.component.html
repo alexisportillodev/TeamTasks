@@ -41,6 +41,13 @@
     </table>
   </div>
 
+  <mat-paginator
+    [length]="data.length"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="[5, 10, 20]"
+    showFirstLastButtons>
+  </mat-paginator>
+
   <div *ngIf="data.length === 0" class="no-data">
     <mat-icon>info</mat-icon>
     <p>No hay datos disponibles</p>

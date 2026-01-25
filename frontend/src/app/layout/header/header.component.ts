@@ -13,24 +13,24 @@ import { filter } from 'rxjs/operators';
 export class HeaderComponent {
 
   private router = inject(Router);
-  title = 'Dashboard';
+  title = 'Team Tasks';
 
   constructor() {
     this.router.events
       .pipe(filter(e => e instanceof NavigationEnd))
-      .subscribe(() => {
-        this.setTitle();
-      });
-
-    this.setTitle();
+      .subscribe(() => this.resolveTitle());
+    
+    this.resolveTitle();
   }
 
-  private setTitle() {
-    const url = this.router.url;
+  private resolveTitle() {
+    let route = this.router.routerState.root;
 
-    if (url.includes('dashboard')) this.title = 'Dashboard';
-    else if (url.includes('projects')) this.title = 'Tareas por proyecto';
-    else if (url.includes('tasks/new')) this.title = 'Nueva tarea';
-    else this.title = 'Team Tasks';
+    while (route?.firstChild) {
+      route = route.firstChild;
+    }
+
+    this.title = route?.snapshot?.data?.['title'] || 'Team Tasks';
   }
+
 }

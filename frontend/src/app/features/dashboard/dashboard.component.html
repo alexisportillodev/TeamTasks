@@ -12,55 +12,51 @@
   <!-- LOADING -->
   <app-loading-spinner *ngIf="loading()" @fadeIn></app-loading-spinner>
 
-  <!-- KPI CARDS -->
-  <div class="kpi-grid" *ngIf="!loading() && !error()">
+  <!-- DASHBOARD -->
+  <ng-container *ngIf="!loading() && !error()">
 
-    <mat-card class="kpi-card">
-      <div class="kpi-icon blue">
-        <mat-icon>assignment</mat-icon>
-      </div>
-      <div>
-        <div class="kpi-value">{{ totalTasks() }}</div>
-        <div class="kpi-label">Tareas totales</div>
-      </div>
-    </mat-card>
+    <!-- KPIs -->
+    <div class="kpi-grid" @fadeIn>
+      <mat-card class="kpi-card">
+        <div class="kpi-icon blue">
+          <mat-icon>task</mat-icon>
+        </div>
+        <div>
+          <div class="kpi-value">{{ totalTasks() }}</div>
+          <div class="kpi-label">Tareas abiertas</div>
+        </div>
+      </mat-card>
 
-    <mat-card class="kpi-card">
-      <div class="kpi-icon red">
-        <mat-icon>warning</mat-icon>
-      </div>
-      <div>
-        <div class="kpi-value danger">{{ riskyDevsCount() }}</div>
-        <div class="kpi-label">Desarrolladores en riesgo</div>
-      </div>
-    </mat-card>
+      <mat-card class="kpi-card">
+        <div class="kpi-icon red">
+          <mat-icon>warning</mat-icon>
+        </div>
+        <div>
+          <div class="kpi-value danger">{{ riskyDevsCount() }}</div>
+          <div class="kpi-label">Desarrolladores en riesgo</div>
+        </div>
+      </mat-card>
 
-    <mat-card class="kpi-card">
-      <div class="kpi-icon green">
-        <mat-icon>trending_up</mat-icon>
-      </div>
-      <div>
-        <div class="kpi-value success">{{ efficiency() }}%</div>
-        <div class="kpi-label">Eficiencia global</div>
-      </div>
-    </mat-card>
+      <mat-card class="kpi-card">
+        <div class="kpi-icon green">
+          <mat-icon>trending_up</mat-icon>
+        </div>
+        <div>
+          <div class="kpi-value success">{{ efficiency() }}%</div>
+          <div class="kpi-label">Eficiencia de proyectos</div>
+        </div>
+      </mat-card>
+    </div>
 
-  </div>
+    <!-- GRID 2 ARRIBA -->
+    <div class="dashboard-grid-2" @fadeInList>
 
-  <!-- DASHBOARD CONTENT -->
-  <div class="dashboard-content"
-       *ngIf="!loading() && !error()"
-       @fadeInList>
-
-    <!-- GRID 2 COLUMNAS -->
-    <div class="dashboard-grid-2">
-
-      <!-- CARGA DESARROLLADORES -->
+      <!-- WORKLOAD -->
       <mat-card class="dashboard-card">
         <mat-card-header>
           <mat-card-title>
             <mat-icon>person</mat-icon>
-            Carga de Trabajo por Desarrollador
+            Carga por desarrollador
           </mat-card-title>
         </mat-card-header>
 
@@ -73,15 +69,15 @@
         </mat-card-content>
       </mat-card>
 
-      <!-- SALUD PROYECTOS -->
+      <!-- PROJECT HEALTH -->
       <mat-card class="dashboard-card">
         <mat-card-header>
           <mat-card-title>
             <mat-icon>folder</mat-icon>
-            Estado de Salud de Proyectos
+            Estado de proyectos
           </mat-card-title>
           <mat-card-subtitle>
-            Las filas resaltadas indican proyectos con más tareas abiertas que completadas
+            Más tareas abiertas que completadas
           </mat-card-subtitle>
         </mat-card-header>
 
@@ -98,16 +94,15 @@
 
     </div>
 
-    <!-- RIESGO (ANCHO COMPLETO) -->
-    <mat-card class="dashboard-card full-width">
-
+    <!-- RIESGO ABAJO -->
+    <mat-card class="dashboard-card full-width" @fadeIn>
       <mat-card-header>
         <mat-card-title>
-          <mat-icon color="warn">warning</mat-icon>
-          Análisis de Riesgo de Retraso
+          <mat-icon>warning</mat-icon>
+          Riesgo de retraso por desarrollador
         </mat-card-title>
         <mat-card-subtitle>
-          Desarrolladores con alto riesgo están resaltados
+          Filas resaltadas indican alto riesgo
         </mat-card-subtitle>
       </mat-card-header>
 
@@ -119,8 +114,7 @@
           (sortChange)="onDelayRiskSort($event)">
         </app-data-table>
       </mat-card-content>
-
     </mat-card>
 
-  </div>
+  </ng-container>
 </div>

@@ -1,9 +1,21 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ViewChild,
+  AfterViewInit,
+  OnChanges,
+  SimpleChanges
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
+
 import { MatTableModule } from '@angular/material/table';
-import { MatSortModule, Sort } from '@angular/material/sort';
+import { MatSortModule, MatSort, Sort } from '@angular/material/sort';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTableDataSource } from '@angular/material/table';
 
 export interface TableColumn<T = any> {
   key: string;
@@ -20,22 +32,46 @@ export interface TableColumn<T = any> {
     CommonModule,
     MatTableModule,
     MatSortModule,
+    MatPaginatorModule,
     MatButtonModule,
     MatIconModule
   ],
   templateUrl: './data-table.component.html',
   styleUrls: ['./data-table.component.scss']
 })
-export class DataTableComponent<T = any> {
+export class DataTableComponent<T = any>
+  implements AfterViewInit, OnChanges {
+
   @Input() columns: TableColumn<T>[] = [];
   @Input() data: T[] = [];
   @Input() highlightRow?: (row: T) => boolean;
+  @Input() pageSize = 5;
 
   @Output() rowClick = new EventEmitter<T>();
   @Output() sortChange = new EventEmitter<Sort>();
 
-  get displayedColumns(): string[] {
-    return this.columns.map(col => col.key);
+  dataSource = new MatTableDataSource<T>([]);
+  displayedColumns: string[] = [];
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['columns']) {
+      this.displayedColumns = this.columns.map(c => c.key);
+    }
+
+    if (changes['data']) {
+      this.dataSource.data = this.data ?? [];
+      if (this.paginator) {
+        this.paginator.firstPage();
+      }
+    }
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   onRowClick(row: T): void {
