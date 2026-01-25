@@ -2,63 +2,60 @@
 
   <!-- Header -->
   <div class="dialog-header">
-    <h2>{{ task.title }}</h2>
+    <div class="title-block">
+      <h2>{{ task.title }}</h2>
+      <span class="subtitle">{{ task.projectName }}</span>
+    </div>
+
     <button mat-icon-button (click)="close()">
       <mat-icon>close</mat-icon>
     </button>
   </div>
 
-  <!-- Content -->
   <mat-dialog-content>
 
-    <div class="detail-section">
+    <!-- Estado y prioridad destacados -->
+    <div class="top-badges">
+      <mat-chip [ngClass]="getStatusClass(task.status)">
+        {{ task.status | statusLabel }}
+      </mat-chip>
 
-      <div class="detail-row">
-        <span class="label">Proyecto:</span>
-        <span class="value">{{ task.projectName }}</span>
-      </div>
+      <mat-chip [ngClass]="getPriorityClass(task.priority)">
+        {{ task.priority | priorityLabel }}
+      </mat-chip>
+    </div>
 
-      <div class="detail-row">
-        <span class="label">Asignado a:</span>
+    <!-- Info principal en grid -->
+    <div class="detail-grid">
+
+      <div class="info-item">
+        <span class="label">Asignado a</span>
         <span class="value">{{ task.assigneeName || 'Sin asignar' }}</span>
       </div>
 
-      <div class="detail-row">
-        <span class="label">Estado:</span>
-        <mat-chip [ngClass]="getStatusClass(task.status)">
-          {{ task.status | statusLabel }}
-        </mat-chip>
-      </div>
-
-      <div class="detail-row">
-        <span class="label">Prioridad:</span>
-        <mat-chip [ngClass]="getPriorityClass(task.priority)">
-          {{ task.priority | priorityLabel }}
-        </mat-chip>
-      </div>
-
-      <div class="detail-row">
-        <span class="label">Complejidad Estimada:</span>
+      <div class="info-item">
+        <span class="label">Complejidad</span>
         <span class="value">{{ task.estimatedComplexity ?? 'N/A' }}</span>
       </div>
 
-      <div class="detail-row">
-        <span class="label">Fecha de Vencimiento:</span>
+      <div class="info-item">
+        <span class="label">Vencimiento</span>
         <span class="value">{{ task.dueDate | date:'dd/MM/yyyy' }}</span>
       </div>
 
-      <div class="detail-row" *ngIf="task.completionDate">
-        <span class="label">Fecha de Completitud:</span>
+      <div class="info-item" *ngIf="task.completionDate">
+        <span class="label">Completada</span>
         <span class="value">{{ task.completionDate | date:'dd/MM/yyyy' }}</span>
       </div>
 
-      <div class="detail-row">
-        <span class="label">Fecha de Creación:</span>
+      <div class="info-item">
+        <span class="label">Creada</span>
         <span class="value">{{ task.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
       </div>
 
     </div>
 
+    <!-- Descripción -->
     <div class="description-section" *ngIf="task.description">
       <h3>Descripción</h3>
       <p>{{ task.description }}</p>
@@ -66,9 +63,8 @@
 
   </mat-dialog-content>
 
-  <!-- Actions -->
   <mat-dialog-actions>
-    <button mat-button color="primary" (click)="close()">Cerrar</button>
+    <button mat-flat-button color="primary" (click)="close()">Cerrar</button>
   </mat-dialog-actions>
-  
+
 </div>
