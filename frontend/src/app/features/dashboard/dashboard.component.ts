@@ -21,7 +21,8 @@ import { fadeInAnimation, fadeInListAnimation } from '@shared/animations/fade-in
     MatButtonModule,
     MatIconModule,
     DataTableComponent,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
@@ -35,9 +36,25 @@ export class DashboardComponent implements OnInit {
   loading = signal(true);
   error = signal<string | null>(null);
   
+  // Workload pagination
   workloadData = signal<DeveloperWorkload[]>([]);
+  workloadPage = signal(1);
+  workloadPageSize = signal(5);
+  workloadTotal = signal(0);
+
+  // Project health pagination
   projectHealthData = signal<ProjectHealth[]>([]);
+  projectHealthPage = signal(1);
+  projectHealthPageSize = signal(5);
+  projectHealthTotal = signal(0);
+
+  // Delay risk pagination
   delayRiskData = signal<DeveloperDelayRisk[]>([]);
+  delayRiskPage = signal(1);
+  delayRiskPageSize = signal(10);
+  delayRiskTotal = signal(0);
+
+  // Columnas
 
   // Columnas
   workloadColumns: TableColumn<DeveloperWorkload>[] = [
@@ -122,14 +139,26 @@ export class DashboardComponent implements OnInit {
     this.error.set(null);
 
     forkJoin({
-      workload: this.dashboardService.getDeveloperWorkload(),
-      health: this.dashboardService.getProjectHealth(),
-      risk: this.dashboardService.getDeveloperDelayRisk()
+      workload: this.dashboardService.getDeveloperWorkload(this.workloadPage(), this.workloadPageSize()),
+      health: this.dashboardService.getProjectHealth(this.projectHealthPage(), this.projectHealthPageSize()),
+      risk: this.dashboardService.getDeveloperDelayRisk(this.delayRiskPage(), this.delayRiskPageSize())
     }).subscribe({
       next: ({ workload, health, risk }) => {
-        this.workloadData.set(workload || []);
-        this.projectHealthData.set(health || []);
-        this.delayRiskData.set(risk || []);
+        this.workloadData.set(workload?.items || []);
+        this.workloadTotal.set(workload?.totalCount || 0);
+        this.workloadPage.set(workload?.page || this.workloadPage());
+        this.workloadPageSize.set(workload?.pageSize || this.workloadPageSize());
+
+        this.projectHealthData.set(health?.items || []);
+        this.projectHealthTotal.set(health?.totalCount || 0);
+        this.projectHealthPage.set(health?.page || this.projectHealthPage());
+        this.projectHealthPageSize.set(health?.pageSize || this.projectHealthPageSize());
+
+        this.delayRiskData.set(risk?.items || []);
+        this.delayRiskTotal.set(risk?.totalCount || 0);
+        this.delayRiskPage.set(risk?.page || this.delayRiskPage());
+        this.delayRiskPageSize.set(risk?.pageSize || this.delayRiskPageSize());
+
         this.loading.set(false);
       },
       error: (err) => {
@@ -137,6 +166,75 @@ export class DashboardComponent implements OnInit {
         this.loading.set(false);
       }
     });
+  }
+
+  loadWorkload(page: number = this.workloadPage(), pageSize: number = this.workloadPageSize()): void {
+    this.loading.set(true);
+    this.dashboardService.getDeveloperWorkload(page, pageSize).subscribe({
+      next: (res) => {
+        this.workloadData.set(res.items);
+        this.workloadTotal.set(res.totalCount);
+        this.workloadPage.set(res.page);
+        this.workloadPageSize.set(res.pageSize);
+        this.loading.set(false);
+      },
+      error: (err) => {
+        this.error.set(err?.message || 'Error al cargar workload');
+        this.loading.set(false);
+      }
+    });
+  }
+
+  loadProjectHealth(page: number = this.projectHealthPage(), pageSize: number = this.projectHealthPageSize()): void {
+    this.loading.set(true);
+    this.dashboardService.getProjectHealth(page, pageSize).subscribe({
+      next: (res) => {
+        this.projectHealthData.set(res.items);
+        this.projectHealthTotal.set(res.totalCount);
+        this.projectHealthPage.set(res.page);
+        this.projectHealthPageSize.set(res.pageSize);
+        this.loading.set(false);
+      },
+      error: (err) => {
+        this.error.set(err?.message || 'Error al cargar project health');
+        this.loading.set(false);
+      }
+    });
+  }
+
+  loadDelayRisk(page: number = this.delayRiskPage(), pageSize: number = this.delayRiskPageSize()): void {
+    this.loading.set(true);
+    this.dashboardService.getDeveloperDelayRisk(page, pageSize).subscribe({
+      next: (res) => {
+        this.delayRiskData.set(res.items);
+        this.delayRiskTotal.set(res.totalCount);
+        this.delayRiskPage.set(res.page);
+        this.delayRiskPageSize.set(res.pageSize);
+        this.loading.set(false);
+      },
+      error: (err) => {
+        this.error.set(err?.message || 'Error al cargar delay risk');
+        this.loading.set(false);
+      }
+    });
+  }
+
+  onWorkloadPageChange(event: { page: number; pageSize: number }): void {
+    this.workloadPage.set(event.page);
+    this.workloadPageSize.set(event.pageSize);
+    this.loadWorkload(event.page, event.pageSize);
+  }
+
+  onProjectHealthPageChange(event: { page: number; pageSize: number }): void {
+    this.projectHealthPage.set(event.page);
+    this.projectHealthPageSize.set(event.pageSize);
+    this.loadProjectHealth(event.page, event.pageSize);
+  }
+
+  onDelayRiskPageChange(event: { page: number; pageSize: number }): void {
+    this.delayRiskPage.set(event.page);
+    this.delayRiskPageSize.set(event.pageSize);
+    this.loadDelayRisk(event.page, event.pageSize);
   }
 
   // Resaltado de filas
@@ -181,8 +279,7 @@ export class DashboardComponent implements OnInit {
   }
 
   totalTasks() {
-    return this.workloadData()
-      ?.reduce((acc, d) => acc + d.openTasksCount, 0) ?? 0;
+    return this.workloadData().reduce((acc, d) => acc + d.openTasksCount, 0);
   }
 
   riskyDevsCount() {

@@ -2,18 +2,25 @@
 
   <div class="table-responsive">
     <table mat-table
-           [dataSource]="data"
+           [dataSource]="dataSource"
            matSort
            (matSortChange)="onSortChange($event)"
            class="mat-table custom-table">
 
-      <!-- Column Headers -->
       <ng-container *ngFor="let column of columns" [matColumnDef]="column.key">
 
-        <th mat-header-cell
-            *matHeaderCellDef
-            mat-sort-header="{{ column.sortable ? column.key : '' }}">
-          {{ column.label }}
+        <th mat-header-cell *matHeaderCellDef>
+
+          <ng-container *ngIf="column.sortable; else noSort">
+            <span mat-sort-header="{{ column.key }}">
+              {{ column.label }}
+            </span>
+          </ng-container>
+
+          <ng-template #noSort>
+            {{ column.label }}
+          </ng-template>
+
         </th>
 
         <td mat-cell
@@ -28,7 +35,6 @@
 
       </ng-container>
 
-      <!-- Header and Row -->
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
 
       <tr mat-row
@@ -41,11 +47,13 @@
     </table>
   </div>
 
+  <!-- ✅ paginator real -->
   <mat-paginator
-    [length]="data.length"
+    [length]="totalLength"
     [pageSize]="pageSize"
     [pageSizeOptions]="[5, 10, 20]"
-    showFirstLastButtons>
+    showFirstLastButtons
+    (page)="onInternalPageChange($event)">
   </mat-paginator>
 
   <div *ngIf="data.length === 0" class="no-data">

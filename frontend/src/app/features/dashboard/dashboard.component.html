@@ -64,6 +64,11 @@
           <app-data-table
             [columns]="workloadColumns"
             [data]="workloadData()"
+            [pageSize]="workloadPageSize()"
+            [currentPage]="workloadPage()"
+            [totalLength]="workloadTotal()"
+            [showPaginator]="true"
+            (pageChange)="onWorkloadPageChange($event)"
             (sortChange)="onWorkloadSort($event)">
           </app-data-table>
         </mat-card-content>
@@ -85,7 +90,11 @@
           <app-data-table
             [columns]="projectHealthColumns"
             [data]="projectHealthData()"
+            [pageSize]="projectHealthPageSize()"
+            [totalLength]="projectHealthTotal()"
+            [showPaginator]="true"
             [highlightRow]="highlightUnhealthyProjects"
+            (pageChange)="onProjectHealthPageChange($event)"
             (sortChange)="onProjectHealthSort($event)"
             (rowClick)="onProjectClick($event)">
           </app-data-table>
@@ -110,7 +119,11 @@
         <app-data-table
           [columns]="delayRiskColumns"
           [data]="delayRiskData()"
+          [pageSize]="delayRiskPageSize()"
+          [totalLength]="delayRiskTotal()"
+          [showPaginator]="true"
           [highlightRow]="highlightHighRisk"
+          (pageChange)="onDelayRiskPageChange($event)"
           (sortChange)="onDelayRiskSort($event)">
         </app-data-table>
       </mat-card-content>
