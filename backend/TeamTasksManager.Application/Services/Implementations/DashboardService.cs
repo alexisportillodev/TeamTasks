@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TeamTasksManager.Application.DTOs.Dashboard;
+using TeamTasksManager.Application.DTOs.Common;
 using TeamTasksManager.Application.Services.Interfaces;
 using TeamTasksManager.Domain.Enums;
 using TeamTasksManager.Infrastructure.Data.Context;
@@ -15,9 +16,9 @@ namespace TeamTasksManager.Infrastructure.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<DeveloperWorkloadDto>> GetDeveloperWorkloadAsync()
+        public async Task<PagedResultDto<DeveloperWorkloadDto>> GetDeveloperWorkloadAsync(int page = 1, int pageSize = 10)
         {
-            return await _context.Developers
+            var query = _context.Developers
                 .Where(d => d.IsActive)
                 .Select(d => new DeveloperWorkloadDto
                 {
@@ -26,24 +27,54 @@ namespace TeamTasksManager.Infrastructure.Services
                     AverageEstimatedComplexity = d.Tasks
                         .Where(t => t.Status != TaskItemStatus.Completed && t.EstimatedComplexity.HasValue)
                         .Average(t => (decimal?)t.EstimatedComplexity) ?? 0
-                })
+                });
+
+            var totalCount = await query.CountAsync();
+
+            var items = await query
+                .OrderBy(d => d.DeveloperName)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
+
+            return new PagedResultDto<DeveloperWorkloadDto>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                Page = page,
+                PageSize = pageSize
+            };
         }
 
-        public async Task<IEnumerable<ProjectHealthDto>> GetProjectHealthAsync()
+        public async Task<PagedResultDto<ProjectHealthDto>> GetProjectHealthAsync(int page = 1, int pageSize = 10)
         {
-            return await _context.Projects
+            var query = _context.Projects
                 .Select(p => new ProjectHealthDto
                 {
                     ProjectName = p.Name,
                     TotalTasks = p.Tasks.Count,
                     OpenTasks = p.Tasks.Count(t => t.Status != TaskItemStatus.Completed),
                     CompletedTasks = p.Tasks.Count(t => t.Status == TaskItemStatus.Completed)
-                })
+                });
+
+            var totalCount = await query.CountAsync();
+
+            var items = await query
+                .OrderBy(p => p.ProjectName)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
+
+            return new PagedResultDto<ProjectHealthDto>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                Page = page,
+                PageSize = pageSize
+            };
         }
 
-        public async Task<IEnumerable<DeveloperDelayRiskDto>> GetDeveloperDelayRiskAsync()
+        public async Task<PagedResultDto<DeveloperDelayRiskDto>> GetDeveloperDelayRiskAsync(int page = 1, int pageSize = 10)
         {
             var sql = @"
                 WITH developer_stats AS (
@@ -78,9 +109,25 @@ namespace TeamTasksManager.Infrastructure.Services
                     END AS HighRiskFlag
                 FROM developer_stats";
 
-            return await _context.Database
+            var all = await _context.Database
                 .SqlQueryRaw<DeveloperDelayRiskDto>(sql)
                 .ToListAsync();
+
+            var totalCount = all.Count;
+
+            var items = all
+                .OrderBy(d => d.DeveloperName)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            return new PagedResultDto<DeveloperDelayRiskDto>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                Page = page,
+                PageSize = pageSize
+            };
         }
     }
 }
