@@ -131,7 +131,7 @@ namespace TeamTasksManager.Tests.Unit.Services
             taskWithRelations.Title = "New Task";
             taskWithRelations.Project = TestDataFixture.GetValidProject();
 
-            _unitOfWorkMock.Setup(u => u.Tasks.GetByIdAsync(It.IsAny<int>()))
+            _unitOfWorkMock.Setup(u => u.Tasks.GetByIdWithDetailsAsync(It.IsAny<int>()))
                 .ReturnsAsync(taskWithRelations);
 
             // Act

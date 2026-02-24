@@ -41,8 +41,8 @@ namespace TeamTasksManager.Application.Validators
                 .WithMessage("La complejidad debe estar entre 1 y 5");
 
             RuleFor(x => x.DueDate)
-                .GreaterThanOrEqualTo(DateTime.Today)
-                .When(x => x.DueDate != null)
+                .NotNull().WithMessage("La fecha de vencimiento es requerida")
+                .Must(date => date >= DateTime.Today)
                 .WithMessage("La fecha de vencimiento debe ser hoy o posterior");
         }
     }
