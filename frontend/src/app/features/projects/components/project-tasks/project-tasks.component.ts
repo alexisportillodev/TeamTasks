@@ -45,8 +45,6 @@ const priorityMap: Record<'Low' | 'Medium' | 'High', string> = {
     PaginatorComponent,
     TaskFiltersComponent,
     TaskStatusChartComponent, // ✅ gráfico
-    StatusLabelPipe,
-    PriorityLabelPipe
   ],
   templateUrl: './project-tasks.component.html',
   styleUrls: ['./project-tasks.component.scss']

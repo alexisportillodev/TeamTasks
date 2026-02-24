@@ -55,8 +55,6 @@ export class DashboardComponent implements OnInit {
   delayRiskTotal = signal(0);
 
   // Columnas
-
-  // Columnas
   workloadColumns: TableColumn<DeveloperWorkload>[] = [
     { key: 'developerName', label: 'Desarrollador', sortable: true },
     { key: 'openTasksCount', label: 'Tareas Abiertas', sortable: true, cssClass: () => 'text-center' },

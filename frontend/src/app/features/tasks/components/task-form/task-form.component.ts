@@ -145,8 +145,8 @@ export class TaskFormComponent implements OnInit {
         this.showSuccess('Tarea creada correctamente');
         this.router.navigate(['/projects', task.projectId, 'tasks']);
       },
-      error: () => {
-        this.showError('Error al crear la tarea');
+      error: (error: string) => {
+        this.showError(error);
         this.loading.set(false);
       }
     });
