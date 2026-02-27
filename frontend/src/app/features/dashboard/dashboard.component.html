@@ -1,19 +1,21 @@
 <div class="dashboard-container" @fadeIn>
 
   <!-- ERROR -->
-  <div *ngIf="error()" class="error-message" @fadeIn>
-    <mat-icon>error</mat-icon>
-    <p>{{ error() }}</p>
-    <button mat-stroked-button color="warn" (click)="loadDashboardData()">
-      Reintentar
-    </button>
-  </div>
+  @if (error()) {
+    <div class="error-message" @fadeIn>
+      <mat-icon>error</mat-icon>
+      <p>{{ error() }}</p>
+      <button mat-stroked-button color="warn" (click)="loadDashboardData()">
+        Reintentar
+      </button>
+    </div>
+  }
 
   <!-- LOADING -->
-  <app-loading-spinner *ngIf="loading()" @fadeIn></app-loading-spinner>
+  @if (loading()) { <app-loading-spinner @fadeIn /> }
 
   <!-- DASHBOARD -->
-  <ng-container *ngIf="!loading() && !error()">
+  @if(!loading() && !error()) {
 
     <!-- KPIs -->
     <div class="kpi-grid" @fadeIn>
@@ -61,16 +63,20 @@
         </mat-card-header>
 
         <mat-card-content>
-          <app-data-table
-            [columns]="workloadColumns"
-            [data]="workloadData()"
-            [pageSize]="workloadPageSize()"
-            [currentPage]="workloadPage()"
-            [totalLength]="workloadTotal()"
-            [showPaginator]="true"
-            (pageChange)="onWorkloadPageChange($event)"
-            (sortChange)="onWorkloadSort($event)">
-          </app-data-table>
+          @if (!workloadLoading()) {
+            <app-data-table
+              [columns]="workloadColumns"
+              [data]="workloadData()"
+              [pageSize]="workloadPageSize()"
+              [currentPage]="workloadPage()"
+              [totalLength]="workloadTotal()"
+              [showPaginator]="true"
+              (pageChange)="onWorkloadPageChange($event)"
+              (sortChange)="onWorkloadSort($event)">
+            </app-data-table>
+          } @else {
+            <app-loading-spinner></app-loading-spinner>
+          }
         </mat-card-content>
       </mat-card>
 
@@ -87,17 +93,21 @@
         </mat-card-header>
 
         <mat-card-content>
-          <app-data-table
-            [columns]="projectHealthColumns"
-            [data]="projectHealthData()"
-            [pageSize]="projectHealthPageSize()"
-            [totalLength]="projectHealthTotal()"
-            [showPaginator]="true"
-            [highlightRow]="highlightUnhealthyProjects"
-            (pageChange)="onProjectHealthPageChange($event)"
-            (sortChange)="onProjectHealthSort($event)"
-            (rowClick)="onProjectClick($event)">
-          </app-data-table>
+          @if (!projectHealthLoading()) {
+            <app-data-table
+              [columns]="projectHealthColumns"
+              [data]="projectHealthData()"
+              [pageSize]="projectHealthPageSize()"
+              [totalLength]="projectHealthTotal()"
+              [showPaginator]="true"
+              [highlightRow]="highlightUnhealthyProjects"
+              (pageChange)="onProjectHealthPageChange($event)"
+              (sortChange)="onProjectHealthSort($event)"
+              (rowClick)="onProjectClick($event)">
+            </app-data-table>
+          } @else {
+            <app-loading-spinner></app-loading-spinner>
+          }
         </mat-card-content>
       </mat-card>
 
@@ -116,18 +126,22 @@
       </mat-card-header>
 
       <mat-card-content>
-        <app-data-table
-          [columns]="delayRiskColumns"
-          [data]="delayRiskData()"
-          [pageSize]="delayRiskPageSize()"
-          [totalLength]="delayRiskTotal()"
-          [showPaginator]="true"
-          [highlightRow]="highlightHighRisk"
-          (pageChange)="onDelayRiskPageChange($event)"
-          (sortChange)="onDelayRiskSort($event)">
-        </app-data-table>
+        @if (!delayRiskLoading()) {
+          <app-data-table
+            [columns]="delayRiskColumns"
+            [data]="delayRiskData()"
+            [pageSize]="delayRiskPageSize()"
+            [totalLength]="delayRiskTotal()"
+            [highlightRow]="highlightHighRisk"
+            [showPaginator]="true"
+            (pageChange)="onDelayRiskPageChange($event)"
+            (sortChange)="onDelayRiskSort($event)">
+          </app-data-table>
+        } @else {
+          <app-loading-spinner></app-loading-spinner>
+        }
       </mat-card-content>
     </mat-card>
 
-  </ng-container>
+  }
 </div>

@@ -34,6 +34,9 @@ export class DashboardComponent implements OnInit {
 
   // Signals para estado reactivo
   loading = signal(true);
+  workloadLoading      = signal(false);
+  projectHealthLoading = signal(false);
+  delayRiskLoading     = signal(false);
   error = signal<string | null>(null);
   
   // Workload pagination
@@ -167,52 +170,52 @@ export class DashboardComponent implements OnInit {
   }
 
   loadWorkload(page: number = this.workloadPage(), pageSize: number = this.workloadPageSize()): void {
-    this.loading.set(true);
+    this.workloadLoading.set(true);
     this.dashboardService.getDeveloperWorkload(page, pageSize).subscribe({
       next: (res) => {
         this.workloadData.set(res.items);
         this.workloadTotal.set(res.totalCount);
         this.workloadPage.set(res.page);
         this.workloadPageSize.set(res.pageSize);
-        this.loading.set(false);
+        this.workloadLoading.set(false);
       },
       error: (err) => {
         this.error.set(err?.message || 'Error al cargar workload');
-        this.loading.set(false);
+        this.workloadLoading.set(false);
       }
     });
   }
 
   loadProjectHealth(page: number = this.projectHealthPage(), pageSize: number = this.projectHealthPageSize()): void {
-    this.loading.set(true);
+    this.projectHealthLoading.set(true);
     this.dashboardService.getProjectHealth(page, pageSize).subscribe({
       next: (res) => {
         this.projectHealthData.set(res.items);
         this.projectHealthTotal.set(res.totalCount);
         this.projectHealthPage.set(res.page);
         this.projectHealthPageSize.set(res.pageSize);
-        this.loading.set(false);
+        this.projectHealthLoading.set(false);
       },
       error: (err) => {
         this.error.set(err?.message || 'Error al cargar project health');
-        this.loading.set(false);
+        this.projectHealthLoading.set(false);
       }
     });
   }
 
   loadDelayRisk(page: number = this.delayRiskPage(), pageSize: number = this.delayRiskPageSize()): void {
-    this.loading.set(true);
+    this.delayRiskLoading.set(true);
     this.dashboardService.getDeveloperDelayRisk(page, pageSize).subscribe({
       next: (res) => {
         this.delayRiskData.set(res.items);
         this.delayRiskTotal.set(res.totalCount);
         this.delayRiskPage.set(res.page);
         this.delayRiskPageSize.set(res.pageSize);
-        this.loading.set(false);
+        this.delayRiskLoading.set(false);
       },
       error: (err) => {
         this.error.set(err?.message || 'Error al cargar delay risk');
-        this.loading.set(false);
+        this.delayRiskLoading.set(false);
       }
     });
   }
