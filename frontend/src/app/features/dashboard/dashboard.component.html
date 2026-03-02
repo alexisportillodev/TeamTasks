@@ -63,7 +63,7 @@
         </mat-card-header>
 
         <mat-card-content>
-          @if (!workloadLoading()) {
+          <div class="table-container">
             <app-data-table
               [columns]="workloadColumns"
               [data]="workloadData()"
@@ -74,9 +74,12 @@
               (pageChange)="onWorkloadPageChange($event)"
               (sortChange)="onWorkloadSort($event)">
             </app-data-table>
-          } @else {
-            <app-loading-spinner></app-loading-spinner>
-          }
+            @if (workloadLoading()) {
+              <div class="loading-overlay">
+                <app-loading-spinner></app-loading-spinner>
+              </div>
+            }
+          </div>
         </mat-card-content>
       </mat-card>
 
@@ -93,7 +96,7 @@
         </mat-card-header>
 
         <mat-card-content>
-          @if (!projectHealthLoading()) {
+          <div class="table-container">
             <app-data-table
               [columns]="projectHealthColumns"
               [data]="projectHealthData()"
@@ -105,9 +108,12 @@
               (sortChange)="onProjectHealthSort($event)"
               (rowClick)="onProjectClick($event)">
             </app-data-table>
-          } @else {
-            <app-loading-spinner></app-loading-spinner>
-          }
+            @if (projectHealthLoading()) {
+              <div class="loading-overlay">
+                <app-loading-spinner></app-loading-spinner>
+              </div>
+            }
+          </div>
         </mat-card-content>
       </mat-card>
 
@@ -126,7 +132,7 @@
       </mat-card-header>
 
       <mat-card-content>
-        @if (!delayRiskLoading()) {
+        <div class="table-container">
           <app-data-table
             [columns]="delayRiskColumns"
             [data]="delayRiskData()"
@@ -137,9 +143,12 @@
             (pageChange)="onDelayRiskPageChange($event)"
             (sortChange)="onDelayRiskSort($event)">
           </app-data-table>
-        } @else {
-          <app-loading-spinner></app-loading-spinner>
-        }
+          @if (delayRiskLoading()) {
+            <div class="loading-overlay">
+              <app-loading-spinner></app-loading-spinner>
+            </div>
+          }
+        </div>
       </mat-card-content>
     </mat-card>
 
