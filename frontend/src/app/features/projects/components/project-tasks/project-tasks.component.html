@@ -26,7 +26,7 @@
 
     <mat-card>
       <p>Total</p>
-      <h2>{{ totalItems() }}</h2>
+      <h2>{{ total() }}</h2>
     </mat-card>
 
     <mat-card>
@@ -36,7 +36,7 @@
 
     <mat-card>
       <p>Pendientes</p>
-      <h2>{{ totalItems() - completedCount() }}</h2>
+      <h2>{{ total() - completedCount() }}</h2>
     </mat-card>
 
   </div>
@@ -59,7 +59,9 @@
   <div *ngIf="error()" class="error-message">
     <mat-icon>error</mat-icon>
     <p>{{ error() }}</p>
-    <button mat-stroked-button color="warn" (click)="loadTasks()">Reintentar</button>
+    <button mat-stroked-button color="warn" (click)="loadTasks()">
+      Reintentar
+    </button>
   </div>
 
   <!-- FILTROS -->
@@ -71,27 +73,25 @@
   </mat-card>
 
   <!-- TABLA -->
-  <app-loading-spinner *ngIf="loading()"></app-loading-spinner>
+  <mat-card-content>
+    <div class="table-container">
+      <app-data-table
+        [columns]="taskColumns"
+        [data]="tasks()"
+        [pageSize]="pageSize()"
+        [currentPage]="page()"
+        [totalLength]="total()"
+        [showPaginator]="true"
+        (pageChange)="onPageChange($event)"
+        (sortChange)="onSort($event)"
+        (rowClick)="onTaskClick($event)">
+      </app-data-table>
+      @if (tableLoading()) {
+        <div class="loading-overlay">
+          <app-loading-spinner></app-loading-spinner>
+        </div>
+      }
+    </div>
 
-  <mat-card *ngIf="!loading() && tasks().length">
-    <app-data-table
-      [columns]="taskColumns"
-      [data]="tasks()"
-      (rowClick)="onTaskClick($event)">
-    </app-data-table>
-  </mat-card>
-
-  <!-- PAGINADOR -->
-  <div class="paginator-container"
-       *ngIf="!loading() && tasks().length">
-
-    <app-paginator
-      [totalItems]="totalItems()"
-      [pageSize]="pageSize()"
-      [currentPage]="currentPage()"
-      (pageChange)="onPageChange($event)">
-    </app-paginator>
-
-  </div>
-
+  </mat-card-content>
 </div>

@@ -8,13 +8,13 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 import { ProjectService, DeveloperService } from '@core/services';
 import { Developer, PagedResult, Task, TaskStatus } from '@core/models';
+
 import { DataTableComponent, TableColumn } from '@shared/components/data-table/data-table.component';
 import { LoadingSpinnerComponent } from '@shared/components/loading-spinner/loading-spinner.component';
-import { PaginatorComponent } from '@shared/components/paginator/paginator.component';
 import { TaskFiltersComponent, TaskFilters } from '@shared/components/task-filters/task-filters.component';
 import { TaskDetailComponent } from '@shared/components/task-detail/task-detail.component';
-import { StatusLabelPipe, PriorityLabelPipe } from '@shared/pipes';
 
+import { StatusLabelPipe, PriorityLabelPipe } from '@shared/pipes';
 import { TaskStatusChartComponent, TaskStatusData } from '@shared/components/task-status-chart/task-status-chart.component';
 
 // Mapeo de clases para status y priority
@@ -42,7 +42,6 @@ const priorityMap: Record<'Low' | 'Medium' | 'High', string> = {
     MatDialogModule,
     DataTableComponent,
     LoadingSpinnerComponent,
-    PaginatorComponent,
     TaskFiltersComponent,
     TaskStatusChartComponent, // ✅ gráfico
   ],
@@ -59,14 +58,15 @@ export class ProjectTasksComponent implements OnInit {
   projectId = signal(0);
   projectName = signal('');
   loading = signal(true);
+  tableLoading = signal(false);
   error = signal<string | null>(null);
 
   tasks = signal<Task[]>([]);
   developers = signal<Developer[]>([]);
 
-  currentPage = signal(1);
+  page = signal(1);
   pageSize = signal(10);
-  totalItems = signal(0);
+  total = signal(0);
 
   currentFilters = signal<TaskFilters>({});
 
@@ -119,28 +119,35 @@ export class ProjectTasksComponent implements OnInit {
     });
   }
 
-  public loadTasks(): void {
-    this.loading.set(true);
+  loadTasks(): void {
+    const isInitialLoad = this.loading();
+
+    if (!isInitialLoad) {
+      this.tableLoading.set(true);
+    }
+
     this.error.set(null);
 
     const filters = this.currentFilters();
 
     this.projectService.getProjectTasks(
       this.projectId(),
-      this.currentPage(),
+      this.page(),
       this.pageSize(),
       filters.status,
       filters.assigneeId
     ).subscribe({
       next: (result: PagedResult<Task>) => {
         this.tasks.set(result.items);
-        this.totalItems.set(result.totalCount);
+        this.total.set(result.totalCount);
         this.calculateChartData(); // ✅ calcular gráfico
         this.loading.set(false);
+        this.tableLoading.set(false);
       },
       error: err => {
         this.error.set(err?.message || 'Error al cargar tareas');
         this.loading.set(false);
+        this.tableLoading.set(false);
       }
     });
   }
@@ -155,9 +162,7 @@ export class ProjectTasksComponent implements OnInit {
     };
 
     this.tasks().forEach(task => {
-      if (statusCounts[task.status] !== undefined) {
-        statusCounts[task.status]++;
-      }
+      statusCounts[task.status]++;
     });
 
     const chartData: TaskStatusData[] = Object.entries(statusCounts)
@@ -172,14 +177,25 @@ export class ProjectTasksComponent implements OnInit {
 
   onFiltersChange(filters: TaskFilters) {
     this.currentFilters.set(filters);
-    this.currentPage.set(1);
+    this.page.set(1);
     this.loadTasks();
   }
 
   onPageChange(event: { page: number; pageSize: number }) {
-    this.currentPage.set(event.page);
+    this.page.set(event.page);
     this.pageSize.set(event.pageSize);
     this.loadTasks();
+  }
+
+  onSort(sort: { active: string; direction: 'asc' | 'desc' | '' }) {
+    const data = [...this.tasks()];
+    if (!sort.active || sort.direction === '') return;
+
+    const isAsc = sort.direction === 'asc';
+    data.sort((a: any, b: any) =>
+      (a[sort.active] < b[sort.active] ? -1 : 1) * (isAsc ? 1 : -1)
+    );
+    this.tasks.set(data);
   }
 
   onTaskClick(task: Task) {
@@ -191,7 +207,10 @@ export class ProjectTasksComponent implements OnInit {
   }
 
   navigateToNewTask() {
-    this.router.navigate(['/tasks/new'], { queryParams: { projectId: this.projectId() } });
+    this.router.navigate(
+      ['/tasks/new'],
+      { queryParams: { projectId: this.projectId() } }
+    );
   }
 
   goBack() {
@@ -199,7 +218,7 @@ export class ProjectTasksComponent implements OnInit {
   }
 
   completedCount() {
-    return this.tasks()?.filter(t => t.status === 'Completed').length ?? 0;
+    return this.tasks().filter(t => t.status === 'Completed').length;
   }
 
 }
